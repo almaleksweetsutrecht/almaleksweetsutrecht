@@ -200,6 +200,10 @@ function PinGate({ onAuthed }: { onAuthed: (token: string) => void }) {
           <Button variant="gold" size="lg" disabled={busy} onClick={submit}>
             {busy ? "Controleren…" : "Inloggen"}
           </Button>
+          <p className="rounded-md border border-gold/30 bg-gold/10 px-3 py-2 text-center text-xs text-muted-foreground">
+            Standaard pincode: <span className="font-bold text-gold-deep">1234</span> — wijzig deze
+            na het inloggen bij Instellingen.
+          </p>
         </div>
       </div>
     </div>

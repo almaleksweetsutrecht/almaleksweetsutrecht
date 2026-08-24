@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, ShoppingBag, Globe, Lock as LockIcon } from "lucide-react";
+import { Menu, ShoppingBag, Globe } from "lucide-react";
 import { useState } from "react";
 
 import { Crown } from "./Crown";
@@ -99,11 +99,8 @@ export function SiteHeader() {
             )}
           </Button>
 
-          <Button variant="goldOutline" size="icon" asChild aria-label={t("owner_login")}>
-            <Link to="/admin" title={t("owner_login")}>
-              <LockIcon />
-            </Link>
-          </Button>
+
+
 
 
 
