@@ -1,4 +1,5 @@
-import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { CreditCard, Minus, Plus, ShoppingBag, Trash2, Wallet, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -8,16 +9,27 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useCart } from "@/lib/cart";
-import { money, useI18n } from "@/lib/i18n";
+import { money, useI18n, type DictKey } from "@/lib/i18n";
 import { unitKey } from "@/lib/products";
+import { createOrder } from "@/lib/shop.functions";
 import { STORE, whatsappLink } from "@/lib/store-info";
 
 type Mode = "pickup" | "delivery";
+type Payment = "ideal" | "card" | "cash";
+
+const payments: { id: Payment; key: DictKey; icon: typeof CreditCard }[] = [
+  { id: "ideal", key: "pay_ideal", icon: Wallet },
+  { id: "card", key: "pay_card", icon: CreditCard },
+  { id: "cash", key: "pay_cash", icon: ShoppingBag },
+];
 
 export function CartDrawer() {
-  const { t, tl, lang } = useI18n();
+  const { t, lang } = useI18n();
   const { lines, setQty, remove, subtotal, count, open, setOpen, clear } = useCart();
+  const submitOrder = useServerFn(createOrder);
   const [mode, setMode] = useState<Mode>("pickup");
+  const [payment, setPayment] = useState<Payment>("ideal");
+  const [busy, setBusy] = useState(false);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -31,16 +43,13 @@ export function CartDrawer() {
     mode === "delivery" && subtotal > 0 && subtotal < STORE.freeDeliveryFrom ? STORE.deliveryFee : 0;
   const total = subtotal + fee;
 
-  const submit = () => {
-    if (!form.name.trim() || !form.phone.trim()) {
-      toast.error(t("fill_required"));
-      return;
-    }
+  const buildMessage = (reference?: string) => {
     const items = lines
       .map((l) => `• ${l.name[lang]} × ${l.qty} — ${money(l.qty * l.price)}`)
       .join("\n");
-    const message = [
+    return [
       `*${STORE.name} — ${STORE.nameAr}*`,
+      reference ? `#${reference}` : "",
       "",
       items,
       "",
@@ -49,6 +58,7 @@ export function CartDrawer() {
       `${t("total")}: ${money(total)}`,
       "",
       `${t("fulfilment")}: ${mode === "pickup" ? t("pickup") : t("delivery")}`,
+      `${t("payment_method")}: ${t(payments.find((p) => p.id === payment)!.key)}`,
       `${t("your_name")}: ${form.name}`,
       `${t("phone")}: ${form.phone}`,
       mode === "delivery" ? `${t("address")}: ${form.address}` : "",
@@ -57,11 +67,68 @@ export function CartDrawer() {
     ]
       .filter(Boolean)
       .join("\n");
+  };
 
-    window.open(whatsappLink(message), "_blank", "noreferrer");
+  const valid = () => {
+    if (!form.name.trim() || !form.phone.trim()) {
+      toast.error(t("fill_required"));
+      return false;
+    }
+    return true;
+  };
+
+  const persist = async () =>
+    submitOrder({
+      data: {
+        customerName: form.name.trim(),
+        phone: form.phone.trim(),
+        fulfilment: mode,
+        address: mode === "delivery" ? form.address.trim() : "",
+        paymentMethod: payment,
+        wantedDate: form.date,
+        wantedTime: form.time,
+        notes: form.notes,
+        items: lines.map((l) => ({
+          slug: l.id,
+          name: l.name.en,
+          qty: l.qty,
+          price: l.price,
+        })),
+        subtotal,
+        deliveryFee: fee,
+        total,
+      },
+    });
+
+  const checkout = async () => {
+    if (!valid()) return;
+    setBusy(true);
+    try {
+      await persist();
+      toast.success(t("order_saved"));
+      clear();
+      setOpen(false);
+    } catch {
+      toast.error(t("order_failed"));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const submitViaWhatsapp = async () => {
+    if (!valid()) return;
+    setBusy(true);
+    let reference: string | undefined;
+    try {
+      reference = (await persist()).reference;
+    } catch {
+      /* still send the WhatsApp message */
+    }
+    window.open(whatsappLink(buildMessage(reference)), "_blank", "noreferrer");
     toast.success(t("order_sent"));
     clear();
     setOpen(false);
+    setBusy(false);
   };
 
   return (
@@ -142,6 +209,27 @@ export function CartDrawer() {
               ))}
             </div>
 
+            <div className="grid gap-2">
+              <Label>{t("payment_method")}</Label>
+              <div className="grid grid-cols-3 gap-2">
+                {payments.map((p) => (
+                  <Button
+                    key={p.id}
+                    variant={payment === p.id ? "gold" : "goldOutline"}
+                    size="sm"
+                    onClick={() => setPayment(p.id)}
+                    className="h-12 flex-col gap-1 whitespace-normal px-1 text-[11px] leading-tight"
+                  >
+                    <p.icon className="h-4 w-4" />
+                    {t(p.key)}
+                  </Button>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground">{t("pay_preview")}</p>
+            </div>
+
+
+
             <div className="grid gap-3">
               <div className="grid gap-1.5">
                 <Label>{t("your_name")}</Label>
@@ -210,8 +298,24 @@ export function CartDrawer() {
               </div>
             </div>
 
-            <Button variant="gold" size="lg" className="mt-2 w-full" onClick={submit}>
-              {t("place_order")}
+            <Button
+              variant="gold"
+              size="lg"
+              className="mt-2 w-full"
+              disabled={busy}
+              onClick={checkout}
+            >
+              {t("checkout_now")}
+            </Button>
+            <Button
+              variant="goldOutline"
+              size="lg"
+              className="w-full gap-2"
+              disabled={busy}
+              onClick={submitViaWhatsapp}
+            >
+              <MessageCircle className="h-4 w-4" />
+              {t("or_whatsapp")}
             </Button>
           </div>
         )}

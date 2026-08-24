@@ -113,6 +113,29 @@ export const dict = {
     ar: "حلويات الملك تنقل مذاق دمشق وحلب إلى هولندا: عجين رقيق، سمنة مصفّاة، فستق حلبي، وقطر بماء الزهر. كل شيء يُخبز طازجاً كل صباح.",
     en: "Al Malek Sweets brings the pastry houses of Damascus and Aleppo to the Netherlands: paper-thin dough, clarified butter, Syrian pistachio and blossom-water syrup. Everything is baked fresh each morning.",
   },
+  payment_method: { nl: "Betaalmethode", ar: "طريقة الدفع", en: "Payment method" },
+  pay_ideal: { nl: "iDEAL", ar: "آيديال (iDEAL)", en: "iDEAL" },
+  pay_card: { nl: "Creditcard", ar: "بطاقة ائتمان", en: "Credit card" },
+  pay_cash: { nl: "Cash bij ophalen", ar: "نقداً عند الاستلام", en: "Cash on pickup" },
+  pay_preview: {
+    nl: "iDEAL en creditcard worden veilig verwerkt zodra de betaalprovider live staat.",
+    ar: "سيتم تنفيذ الدفع بآيديال والبطاقة بشكل آمن عند تفعيل بوابة الدفع.",
+    en: "iDEAL and card payments are processed securely once the payment provider goes live.",
+  },
+  checkout_now: { nl: "Bestelling plaatsen", ar: "تأكيد الطلب", en: "Place order" },
+  or_whatsapp: { nl: "Bestellen via WhatsApp", ar: "الطلب عبر واتساب", en: "Order via WhatsApp" },
+  ask_whatsapp: { nl: "Vraag via WhatsApp", ar: "اسأل عبر واتساب", en: "Ask via WhatsApp" },
+  order_saved: {
+    nl: "Bedankt! Je bestelling is doorgestuurd naar de winkel.",
+    ar: "شكراً لك! تم إرسال طلبك إلى المتجر.",
+    en: "Thank you! Your order has been sent to the shop.",
+  },
+  order_failed: {
+    nl: "Bestelling opslaan mislukte — probeer WhatsApp.",
+    ar: "تعذّر حفظ الطلب — جرّب واتساب.",
+    en: "We could not save the order — please try WhatsApp.",
+  },
+  owner_login: { nl: "Eigenaar", ar: "لوحة التحكم", en: "Owner" },
   footer_rights: { nl: "Alle rechten voorbehouden.", ar: "جميع الحقوق محفوظة.", en: "All rights reserved." },
 } satisfies Record<string, Localized>;
 
