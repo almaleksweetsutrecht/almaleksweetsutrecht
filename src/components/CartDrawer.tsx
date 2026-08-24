@@ -1,5 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
-import { CreditCard, Minus, Plus, ShoppingBag, Trash2, Wallet, MessageCircle } from "lucide-react";
+import { CreditCard, Minus, Plus, ShoppingBag, Trash2, Wallet } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -12,7 +12,7 @@ import { useCart } from "@/lib/cart";
 import { money, useI18n, type DictKey } from "@/lib/i18n";
 import { unitKey } from "@/lib/products";
 import { createOrder } from "@/lib/shop.functions";
-import { STORE, whatsappLink } from "@/lib/store-info";
+import { STORE } from "@/lib/store-info";
 
 type Mode = "pickup" | "delivery";
 type Payment = "ideal" | "card" | "cash";
@@ -42,32 +42,6 @@ export function CartDrawer() {
   const fee =
     mode === "delivery" && subtotal > 0 && subtotal < STORE.freeDeliveryFrom ? STORE.deliveryFee : 0;
   const total = subtotal + fee;
-
-  const buildMessage = (reference?: string) => {
-    const items = lines
-      .map((l) => `• ${l.name[lang]} × ${l.qty} — ${money(l.qty * l.price)}`)
-      .join("\n");
-    return [
-      `*${STORE.name} — ${STORE.nameAr}*`,
-      reference ? `#${reference}` : "",
-      "",
-      items,
-      "",
-      `${t("subtotal")}: ${money(subtotal)}`,
-      fee ? `${t("delivery_fee")}: ${money(fee)}` : "",
-      `${t("total")}: ${money(total)}`,
-      "",
-      `${t("fulfilment")}: ${mode === "pickup" ? t("pickup") : t("delivery")}`,
-      `${t("payment_method")}: ${t(payments.find((p) => p.id === payment)!.key)}`,
-      `${t("your_name")}: ${form.name}`,
-      `${t("phone")}: ${form.phone}`,
-      mode === "delivery" ? `${t("address")}: ${form.address}` : "",
-      form.date ? `${t("date")}: ${form.date} ${form.time}` : "",
-      form.notes ? `${t("notes")}: ${form.notes}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n");
-  };
 
   const valid = () => {
     if (!form.name.trim() || !form.phone.trim()) {
@@ -113,22 +87,6 @@ export function CartDrawer() {
     } finally {
       setBusy(false);
     }
-  };
-
-  const submitViaWhatsapp = async () => {
-    if (!valid()) return;
-    setBusy(true);
-    let reference: string | undefined;
-    try {
-      reference = (await persist()).reference;
-    } catch {
-      /* still send the WhatsApp message */
-    }
-    window.open(whatsappLink(buildMessage(reference)), "_blank", "noreferrer");
-    toast.success(t("order_sent"));
-    clear();
-    setOpen(false);
-    setBusy(false);
   };
 
   return (
@@ -306,16 +264,6 @@ export function CartDrawer() {
               onClick={checkout}
             >
               {t("checkout_now")}
-            </Button>
-            <Button
-              variant="goldOutline"
-              size="lg"
-              className="w-full gap-2"
-              disabled={busy}
-              onClick={submitViaWhatsapp}
-            >
-              <MessageCircle className="h-4 w-4" />
-              {t("or_whatsapp")}
             </Button>
           </div>
         )}
