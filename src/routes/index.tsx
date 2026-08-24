@@ -9,7 +9,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { CustomCakeDialog } from "@/components/CustomCakeDialog";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n";
-import { products } from "@/lib/products";
+import { useShopProducts } from "@/lib/shop";
 import { STORE } from "@/lib/store-info";
 
 export const Route = createFileRoute("/")({
@@ -34,6 +34,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { t } = useI18n();
+  const { products } = useShopProducts();
   const featured = products.filter((p) => p.featured);
 
   return (

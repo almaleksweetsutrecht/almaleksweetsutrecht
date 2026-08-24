@@ -4,11 +4,13 @@ import { ProductCard } from "./ProductCard";
 import { Reveal } from "./Reveal";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n";
-import { categories, products, type CategoryId } from "@/lib/products";
+import { categories, type CategoryId } from "@/lib/products";
+import { useShopProducts } from "@/lib/shop";
 
 export function MenuSection({ id = "menu" }: { id?: string }) {
   const { t } = useI18n();
   const [active, setActive] = useState<CategoryId | "all">("all");
+  const { products } = useShopProducts();
 
   const shown = active === "all" ? products : products.filter((p) => p.category === active);
 

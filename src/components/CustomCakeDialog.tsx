@@ -1,5 +1,8 @@
+import { useServerFn } from "@tanstack/react-start";
 import { CakeSlice, ImagePlus } from "lucide-react";
 import { useRef, useState, type ReactNode } from "react";
+
+import { createCakeRequest } from "@/lib/shop.functions";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -40,6 +43,7 @@ const occasions: { id: string; key: DictKey }[] = [
 
 export function CustomCakeDialog({ children }: { children: ReactNode }) {
   const { t } = useI18n();
+  const sendRequest = useServerFn(createCakeRequest);
   const fileRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [size, setSize] = useState(sizes[1]!.id);
@@ -54,7 +58,7 @@ export function CustomCakeDialog({ children }: { children: ReactNode }) {
   const base = sizes.find((s) => s.id === size)!.price;
   const estimate = base + (layers - 1) * 14;
 
-  const submit = () => {
+  const submit = async () => {
     if (!form.name.trim() || !form.phone.trim()) {
       toast.error(t("fill_required"));
       return;
@@ -75,6 +79,27 @@ export function CustomCakeDialog({ children }: { children: ReactNode }) {
     ]
       .filter(Boolean)
       .join("\n");
+
+    try {
+      await sendRequest({
+        data: {
+          customerName: form.name.trim(),
+          phone: form.phone.trim(),
+          occasion: t(occasion),
+          size: sizes.find((s) => s.id === size)!.label,
+          layers: String(layers),
+          flavour: t(flavour),
+          fulfilment: mode,
+          wantedDate: form.date,
+          wantedTime: form.time,
+          notes: [form.notes, photoName ? `Referentiefoto: ${photoName}` : ""]
+            .filter(Boolean)
+            .join(" · "),
+        },
+      });
+    } catch {
+      /* WhatsApp still carries the request */
+    }
 
     window.open(whatsappLink(message), "_blank", "noreferrer");
     toast.success(t("order_sent"));
