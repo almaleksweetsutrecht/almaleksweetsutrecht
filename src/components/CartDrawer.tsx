@@ -265,16 +265,6 @@ export function CartDrawer() {
             >
               {t("checkout_now")}
             </Button>
-            <Button
-              variant="goldOutline"
-              size="lg"
-              className="w-full gap-2"
-              disabled={busy}
-              onClick={submitViaWhatsapp}
-            >
-              <MessageCircle className="h-4 w-4" />
-              {t("or_whatsapp")}
-            </Button>
           </div>
         )}
       </SheetContent>
