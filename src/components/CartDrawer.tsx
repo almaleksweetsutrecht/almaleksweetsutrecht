@@ -1,5 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
-import { CreditCard, Minus, Plus, ShoppingBag, Trash2, Wallet, MessageCircle } from "lucide-react";
+import { CreditCard, Minus, Plus, ShoppingBag, Trash2, Wallet } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -12,7 +12,7 @@ import { useCart } from "@/lib/cart";
 import { money, useI18n, type DictKey } from "@/lib/i18n";
 import { unitKey } from "@/lib/products";
 import { createOrder } from "@/lib/shop.functions";
-import { STORE, whatsappLink } from "@/lib/store-info";
+import { STORE } from "@/lib/store-info";
 
 type Mode = "pickup" | "delivery";
 type Payment = "ideal" | "card" | "cash";
