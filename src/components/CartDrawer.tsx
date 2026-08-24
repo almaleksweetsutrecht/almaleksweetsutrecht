@@ -24,7 +24,7 @@ const payments: { id: Payment; key: DictKey; icon: typeof CreditCard }[] = [
 ];
 
 export function CartDrawer() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { lines, setQty, remove, subtotal, count, open, setOpen, clear } = useCart();
   const submitOrder = useServerFn(createOrder);
   const [mode, setMode] = useState<Mode>("pickup");
