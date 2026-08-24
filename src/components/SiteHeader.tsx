@@ -99,11 +99,8 @@ export function SiteHeader() {
             )}
           </Button>
 
-          <Button variant="goldOutline" size="icon" asChild aria-label={t("owner_login")}>
-            <Link to="/admin" title={t("owner_login")}>
-              <LockIcon />
-            </Link>
-          </Button>
+
+
 
 
 
