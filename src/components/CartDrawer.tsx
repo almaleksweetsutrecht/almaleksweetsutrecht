@@ -43,32 +43,6 @@ export function CartDrawer() {
     mode === "delivery" && subtotal > 0 && subtotal < STORE.freeDeliveryFrom ? STORE.deliveryFee : 0;
   const total = subtotal + fee;
 
-  const buildMessage = (reference?: string) => {
-    const items = lines
-      .map((l) => `• ${l.name[lang]} × ${l.qty} — ${money(l.qty * l.price)}`)
-      .join("\n");
-    return [
-      `*${STORE.name} — ${STORE.nameAr}*`,
-      reference ? `#${reference}` : "",
-      "",
-      items,
-      "",
-      `${t("subtotal")}: ${money(subtotal)}`,
-      fee ? `${t("delivery_fee")}: ${money(fee)}` : "",
-      `${t("total")}: ${money(total)}`,
-      "",
-      `${t("fulfilment")}: ${mode === "pickup" ? t("pickup") : t("delivery")}`,
-      `${t("payment_method")}: ${t(payments.find((p) => p.id === payment)!.key)}`,
-      `${t("your_name")}: ${form.name}`,
-      `${t("phone")}: ${form.phone}`,
-      mode === "delivery" ? `${t("address")}: ${form.address}` : "",
-      form.date ? `${t("date")}: ${form.date} ${form.time}` : "",
-      form.notes ? `${t("notes")}: ${form.notes}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n");
-  };
-
   const valid = () => {
     if (!form.name.trim() || !form.phone.trim()) {
       toast.error(t("fill_required"));
