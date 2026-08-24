@@ -89,22 +89,6 @@ export function CartDrawer() {
     }
   };
 
-  const submitViaWhatsapp = async () => {
-    if (!valid()) return;
-    setBusy(true);
-    let reference: string | undefined;
-    try {
-      reference = (await persist()).reference;
-    } catch {
-      /* still send the WhatsApp message */
-    }
-    window.open(whatsappLink(buildMessage(reference)), "_blank", "noreferrer");
-    toast.success(t("order_sent"));
-    clear();
-    setOpen(false);
-    setBusy(false);
-  };
-
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent className="flex w-full flex-col gap-0 overflow-y-auto sm:max-w-md">
