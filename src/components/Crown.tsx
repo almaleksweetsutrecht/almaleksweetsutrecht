@@ -46,6 +46,8 @@ export function Crown({ className = "h-10 w-10" }: { className?: string }) {
         <circle cx="60" cy="20" r="9" fill="url(#malekGold)" stroke="oklch(0.52 0.09 72)" strokeWidth="0.8" />
         <circle cx="24" cy="27" r="7.5" fill="url(#malekGold)" stroke="oklch(0.52 0.09 72)" strokeWidth="0.8" />
         <circle cx="96" cy="27" r="7.5" fill="url(#malekGold)" stroke="oklch(0.52 0.09 72)" strokeWidth="0.8" />
+        <circle cx="11.5" cy="30" r="5.6" fill="url(#malekGold)" stroke="oklch(0.52 0.09 72)" strokeWidth="0.8" />
+        <circle cx="108.5" cy="30" r="5.6" fill="url(#malekGold)" stroke="oklch(0.52 0.09 72)" strokeWidth="0.8" />
         {/* highlights on finials */}
         <ellipse cx="57.5" cy="16.5" rx="3.4" ry="2.4" fill="url(#malekSheen)" />
         <ellipse cx="21.8" cy="24" rx="2.7" ry="1.9" fill="url(#malekSheen)" />
