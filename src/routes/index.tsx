@@ -49,14 +49,20 @@ function Home() {
         />
         <div className="absolute inset-0 bg-linear-to-b from-royal-deep/80 via-royal/70 to-royal-deep/95" />
         <div className="relative mx-auto flex max-w-4xl flex-col items-center px-4 py-28 text-center sm:px-6 sm:py-36">
-          <span className="crown-float">
-            <Crown className="h-16 w-20 sm:h-20 sm:w-24" />
-          </span>
-          <p className="mt-6 text-xs uppercase tracking-[0.4em] text-gold">{t("hero_kicker")}</p>
+          <div className="flex flex-col items-center">
+            <span className="crown-float">
+              <Crown className="h-20 w-28 sm:h-24 sm:w-36" />
+            </span>
+            <p className="-mt-1 font-display text-3xl font-bold uppercase tracking-[0.16em] text-gold-shine sm:text-5xl">
+              AL MALEK
+            </p>
+            <span className="mt-2 h-[3px] w-full max-w-[16rem] rounded-full bg-gold-gradient sm:max-w-sm" />
+            <p className="arabic mt-3 text-2xl text-gold/90 sm:text-3xl">{STORE.nameAr}</p>
+          </div>
+          <p className="mt-8 text-xs uppercase tracking-[0.4em] text-gold">{t("hero_kicker")}</p>
           <h1 className="mt-4 font-display text-4xl font-bold leading-tight text-gold-shine sm:text-6xl">
             {t("hero_title")}
           </h1>
-          <p className="arabic mt-4 text-2xl text-gold/90 sm:text-3xl">{STORE.nameAr}</p>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-cream/85">{t("hero_text")}</p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
             <Button asChild variant="gold" size="xl" className="glow-gold">
