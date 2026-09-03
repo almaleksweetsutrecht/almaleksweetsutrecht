@@ -74,11 +74,37 @@ export function CartDrawer() {
       },
     });
 
+  const buildMessage = () => {
+    const items = lines
+      .map((l) => `• ${l.name[lang]} × ${l.qty} — ${money(l.qty * l.price)}`)
+      .join("\n");
+    return [
+      `${t("reserve_title")} — ${STORE.name}`,
+      "",
+      items,
+      "",
+      `${t("subtotal")}: ${money(subtotal)}`,
+      `${t("delivery_fee")}: ${fee === 0 ? t("free") : money(fee)}`,
+      `${t("total")}: ${money(total)}`,
+      "",
+      `${t("your_name")}: ${form.name}`,
+      `${t("phone")}: ${form.phone}`,
+      `${t(mode)}${mode === "delivery" && form.address ? ` — ${form.address}` : ""}`,
+      form.date || form.time ? `${t("date")}: ${form.date} ${form.time}` : "",
+      form.notes ? `${t("notes")}: ${form.notes}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+  };
+
   const checkout = async () => {
     if (!valid()) return;
     setBusy(true);
     try {
       await persist();
+      if (payment === "whatsapp") {
+        window.open(whatsappLink(buildMessage()), "_blank", "noopener,noreferrer");
+      }
       toast.success(t("order_saved"));
       clear();
       setOpen(false);
@@ -88,6 +114,7 @@ export function CartDrawer() {
       setBusy(false);
     }
   };
+
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
