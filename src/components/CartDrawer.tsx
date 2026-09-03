@@ -196,7 +196,7 @@ export function CartDrawer() {
 
             <div className="grid gap-2">
               <Label>{t("payment_method")}</Label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 {payments.map((p) => (
                   <Button
                     key={p.id}
