@@ -1,5 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
-import { CreditCard, Minus, Plus, ShoppingBag, Trash2, Wallet } from "lucide-react";
+import { MessageCircle, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -12,14 +12,13 @@ import { useCart } from "@/lib/cart";
 import { money, useI18n, type DictKey } from "@/lib/i18n";
 import { unitKey } from "@/lib/products";
 import { createOrder } from "@/lib/shop.functions";
-import { STORE } from "@/lib/store-info";
+import { STORE, whatsappLink } from "@/lib/store-info";
 
 type Mode = "pickup" | "delivery";
-type Payment = "ideal" | "card" | "cash";
+type Payment = "whatsapp" | "cash";
 
-const payments: { id: Payment; key: DictKey; icon: typeof CreditCard }[] = [
-  { id: "ideal", key: "pay_ideal", icon: Wallet },
-  { id: "card", key: "pay_card", icon: CreditCard },
+const payments: { id: Payment; key: DictKey; icon: typeof MessageCircle }[] = [
+  { id: "whatsapp", key: "or_whatsapp", icon: MessageCircle },
   { id: "cash", key: "pay_cash", icon: ShoppingBag },
 ];
 
@@ -28,7 +27,7 @@ export function CartDrawer() {
   const { lines, setQty, remove, subtotal, count, open, setOpen, clear } = useCart();
   const submitOrder = useServerFn(createOrder);
   const [mode, setMode] = useState<Mode>("pickup");
-  const [payment, setPayment] = useState<Payment>("ideal");
+  const [payment, setPayment] = useState<Payment>("whatsapp");
   const [busy, setBusy] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -42,6 +41,7 @@ export function CartDrawer() {
   const fee =
     mode === "delivery" && subtotal > 0 && subtotal < STORE.freeDeliveryFrom ? STORE.deliveryFee : 0;
   const total = subtotal + fee;
+
 
   const valid = () => {
     if (!form.name.trim() || !form.phone.trim()) {
