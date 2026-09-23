@@ -8,6 +8,11 @@ import halawet from "@/assets/halawet-el-jibn.jpg";
 import kunafa from "@/assets/kunafa.jpg";
 import mabroume from "@/assets/mabroume.jpg";
 import mafroukeh from "@/assets/mafroukeh.jpg";
+import madloukaImgAsset from "@/assets/menu/madlouka.png.asset.json";
+import klerImgAsset from "@/assets/menu/kler.png.asset.json";
+import cakePieceImgAsset from "@/assets/menu/cake-piece.png.asset.json";
+import halawetImgAsset from "@/assets/menu/halawet-el-jibn.png.asset.json";
+import rasImgAsset from "@/assets/menu/ras-el-abed.webp.asset.json";
 import pistachioHarissaAsset from "@/assets/menu/pistachio-harissa.png.asset.json";
 import mabroumaPistachioAsset from "@/assets/menu/mabrouma-pistachio.png.asset.json";
 import pistachioPastryAsset from "@/assets/menu/pistachio-pastry.png.asset.json";
@@ -19,6 +24,11 @@ import baklavaPistachioAsset from "@/assets/menu/baklava-pistachio.png.asset.jso
 import petitFourAsset from "@/assets/menu/petit-four.png.asset.json";
 import pistachioRollsAsset from "@/assets/menu/pistachio-rolls.png.asset.json";
 
+const madloukaImg = madloukaImgAsset.url;
+const klerImg = klerImgAsset.url;
+const cakePieceImg = cakePieceImgAsset.url;
+const halawetImg = halawetImgAsset.url;
+const rasImg = rasImgAsset.url;
 const pistachioHarissa = pistachioHarissaAsset.url;
 const mabroumaPistachio = mabroumaPistachioAsset.url;
 const pistachioPastry = pistachioPastryAsset.url;
@@ -74,16 +84,16 @@ function product(
 }
 
 export const products: Product[] = [
-  product("kler", "cold", { nl: "Kler", ar: "كلير", en: "Kler" }, 2, "piece", chocolateCake, true),
-  product("cake-piece", "cold", { nl: "Stuk taart", ar: "كاتو قطع", en: "Cake slice" }, 2.5, "piece", chocolateCake),
-  product("ras-el-abed", "cold", { nl: "Ras El Abed", ar: "راس العبد", en: "Ras El Abed" }, 1, "piece", chocolateCake),
+  product("kler", "cold", { nl: "Kler", ar: "كلير", en: "Kler" }, 2, "piece", klerImg, true),
+  product("cake-piece", "cold", { nl: "Stuk taart", ar: "كاتو قطع", en: "Cake slice" }, 2.5, "piece", cakePieceImg),
+  product("ras-el-abed", "cold", { nl: "Ras El Abed", ar: "راس العبد", en: "Ras El Abed" }, 1, "piece", rasImg),
   product("liliana", "cold", { nl: "Liliana", ar: "ليليانا", en: "Liliana" }, 20, "kg", mafroukeh),
   product("booza", "cold", { nl: "Arabisch ijs", ar: "بوظة", en: "Arabic ice cream" }, 20, "kg", halawet),
   product("esh-el-bulbul", "cold", { nl: "Esh El Bulbul", ar: "عش البلبل", en: "Esh El Bulbul" }, 20, "kg", eshBulbul),
   product("medium-cake", "cold", { nl: "Middelgrote taart", ar: "قالب كاتو وسط", en: "Medium cake" }, 25, "cake", chocolateCake),
   product("large-cake", "cold", { nl: "Grote taart", ar: "قالب كاتو كبير", en: "Large cake" }, 30, "cake", chocolateCake),
   product("mhalaya", "cold", { nl: "Mhalaya", ar: "محلاية", en: "Mhalaya" }, 2.5, "piece", halawet),
-  product("ashta", "cold", { nl: "Ashta-room", ar: "قشطة", en: "Ashta cream" }, 20, "kg", halawet),
+  product("ashta", "cold", { nl: "Ashta-room", ar: "قشطة", en: "Ashta cream" }, 20, "kg", madloukaImg),
 
   product("classic-mix", "baklava", { nl: "Klassieke mix", ar: "مشكل كلاسيك", en: "Classic mix" }, 35, "kg", baklavaPistachio, true),
   product("baklava-mix", "baklava", { nl: "Gemengde baklava", ar: "بقلاوة مشكل", en: "Mixed baklava" }, 35, "kg", baklavaPistachio, true),
@@ -96,14 +106,14 @@ export const products: Product[] = [
   product("plain-maarouk", "baklava", { nl: "Naturel maarouk", ar: "معروك سادة", en: "Plain maarouk" }, 5, "piece", greenMabrouma),
   product("swar", "baklava", { nl: "Swar", ar: "سوار", en: "Swar" }, 25, "kg", mabroumaPistachio),
 
-  product("halawet-el-jibn", "pastries", { nl: "Halawet El Jibn", ar: "حلاوة الجبن", en: "Halawet El Jibn" }, 20, "kg", halawet, true),
+  product("halawet-el-jibn", "pastries", { nl: "Halawet El Jibn", ar: "حلاوة الجبن", en: "Halawet El Jibn" }, 20, "kg", halawetImg, true),
   product("faisaliyat-pistachio", "pastries", { nl: "Faisaliyat met pistache", ar: "فصليات وفستق", en: "Faisaliyat with pistachio" }, 4, "piece", pistachioPastry),
   product("awama", "pastries", { nl: "Awama", ar: "عوامة", en: "Awama" }, 15, "kg", basbousa),
   product("nabulsiya", "pastries", { nl: "Nabulsiya", ar: "نابلسية", en: "Nabulsiya" }, 18, "kg", kunafa, true),
   product("qatayef", "pastries", { nl: "Qatayef", ar: "قطايف", en: "Qatayef" }, 15, "kg", kunafa),
   product("harissa", "pastries", { nl: "Harissa", ar: "هريسة", en: "Harissa" }, 18, "kg", pistachioHarissa),
   product("pastry-mix", "pastries", { nl: "Gemengde zoetwaren", ar: "مشكل", en: "Mixed sweets" }, 15, "kg", baklavaBox),
-  product("madlouka", "pastries", { nl: "Madlouka", ar: "مدلوقة", en: "Madlouka" }, 20, "kg", mafroukeh),
+  product("madlouka", "pastries", { nl: "Madlouka", ar: "مدلوقة", en: "Madlouka" }, 20, "kg", madloukaImg),
   product("kunafa-ashta", "pastries", { nl: "Kunafa met ashta", ar: "كنافة بالقشطة", en: "Kunafa with ashta" }, 20, "kg", kunafa),
   product("shuaibiyat-ashta", "pastries", { nl: "Shuaibiyat met ashta", ar: "شعيبيات قشطة", en: "Shuaibiyat with ashta" }, 2.5, "piece", halawet),
   product("namoura", "pastries", { nl: "Namoura", ar: "نمورة", en: "Namoura" }, 20, "kg", basbousa),
