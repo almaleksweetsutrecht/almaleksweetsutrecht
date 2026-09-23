@@ -145,22 +145,6 @@ function Home() {
             </div>
           </Reveal>
         </div>
-      </section>
-
-      <section className="relative overflow-hidden bg-royal-gradient py-20">
-        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-          <h2 className="font-display text-3xl text-gold-shine sm:text-4xl">{t("cakes_title")}</h2>
-          <p className="mt-4 text-cream/80">{t("cakes_sub")}</p>
-          <div className="mt-8">
-            <CustomCakeDialog>
-              <Button variant="gold" size="xl" className="glow-gold">
-                <Sparkles />
-                {t("reserve_now")}
-              </Button>
-            </CustomCakeDialog>
-          </div>
-        </div>
-      </section>
     </>
   );
 }
