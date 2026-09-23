@@ -14,6 +14,10 @@ import pistachioPastryAsset from "@/assets/menu/pistachio-pastry.png.asset.json"
 import warbatPistachioAsset from "@/assets/menu/warbat-pistachio.png.asset.json";
 import kunafaPistachioAsset from "@/assets/menu/kunafa-pistachio.png.asset.json";
 import greenMabroumaAsset from "@/assets/menu/green-mabrouma.png.asset.json";
+import eshBulbulAsset from "@/assets/menu/esh-el-bulbul.png.asset.json";
+import baklavaPistachioAsset from "@/assets/menu/baklava-pistachio.png.asset.json";
+import petitFourAsset from "@/assets/menu/petit-four.png.asset.json";
+import pistachioRollsAsset from "@/assets/menu/pistachio-rolls.png.asset.json";
 
 const pistachioHarissa = pistachioHarissaAsset.url;
 const mabroumaPistachio = mabroumaPistachioAsset.url;
@@ -21,6 +25,10 @@ const pistachioPastry = pistachioPastryAsset.url;
 const warbatPistachio = warbatPistachioAsset.url;
 const kunafaPistachio = kunafaPistachioAsset.url;
 const greenMabrouma = greenMabroumaAsset.url;
+const eshBulbul = eshBulbulAsset.url;
+const baklavaPistachio = baklavaPistachioAsset.url;
+const petitFourImg = petitFourAsset.url;
+const pistachioRolls = pistachioRollsAsset.url;
 
 export type CategoryId = "cold" | "baklava" | "pastries" | "cookies" | "candy";
 export type Unit = "kg" | "piece" | "box" | "cake";
@@ -71,22 +79,22 @@ export const products: Product[] = [
   product("ras-el-abed", "cold", { nl: "Ras El Abed", ar: "راس العبد", en: "Ras El Abed" }, 1, "piece", chocolateCake),
   product("liliana", "cold", { nl: "Liliana", ar: "ليليانا", en: "Liliana" }, 20, "kg", mafroukeh),
   product("booza", "cold", { nl: "Arabisch ijs", ar: "بوظة", en: "Arabic ice cream" }, 20, "kg", halawet),
-  product("esh-el-bulbul", "cold", { nl: "Esh El Bulbul", ar: "عش البلبل", en: "Esh El Bulbul" }, 20, "kg", mabroume),
+  product("esh-el-bulbul", "cold", { nl: "Esh El Bulbul", ar: "عش البلبل", en: "Esh El Bulbul" }, 20, "kg", eshBulbul),
   product("medium-cake", "cold", { nl: "Middelgrote taart", ar: "قالب كاتو وسط", en: "Medium cake" }, 25, "cake", chocolateCake),
   product("large-cake", "cold", { nl: "Grote taart", ar: "قالب كاتو كبير", en: "Large cake" }, 30, "cake", chocolateCake),
   product("mhalaya", "cold", { nl: "Mhalaya", ar: "محلاية", en: "Mhalaya" }, 2.5, "piece", halawet),
   product("ashta", "cold", { nl: "Ashta-room", ar: "قشطة", en: "Ashta cream" }, 20, "kg", halawet),
 
-  product("classic-mix", "baklava", { nl: "Klassieke mix", ar: "مشكل كلاسيك", en: "Classic mix" }, 35, "kg", baklavaBox, true),
-  product("baklava-mix", "baklava", { nl: "Gemengde baklava", ar: "بقلاوة مشكل", en: "Mixed baklava" }, 35, "kg", baklavaBox, true),
+  product("classic-mix", "baklava", { nl: "Klassieke mix", ar: "مشكل كلاسيك", en: "Classic mix" }, 35, "kg", baklavaPistachio, true),
+  product("baklava-mix", "baklava", { nl: "Gemengde baklava", ar: "بقلاوة مشكل", en: "Mixed baklava" }, 35, "kg", baklavaPistachio, true),
   product("half-kilo-mix", "baklava", { nl: "Gemengde doos ½ kilo", ar: "نصف كيلو مشكل", en: "Half-kilo mixed box" }, 35, "box", baklavaBox),
   product("maarouk-ashta", "baklava", { nl: "Maarouk met ashta", ar: "معروك قشطة", en: "Maarouk with ashta" }, 12, "piece", basbousa),
   product("maarouk", "baklava", { nl: "Maarouk", ar: "معروك", en: "Maarouk" }, 8, "piece", basbousa),
   product("kunafa-cheese", "baklava", { nl: "Kunafa met kaas", ar: "كنافة جبن", en: "Cheese kunafa" }, 8, "piece", kunafaPistachio),
   product("kunafa-piece", "baklava", { nl: "Stuk kunafa", ar: "قطعة كنافة", en: "Kunafa piece" }, 5, "piece", kunafaPistachio),
-  product("mabrouma", "baklava", { nl: "Mabrouma", ar: "مبرومة", en: "Mabrouma" }, 40, "kg", mabroumaPistachio, true),
-  product("plain-maarouk", "baklava", { nl: "Naturel maarouk", ar: "معروك سادة", en: "Plain maarouk" }, 5, "piece", basbousa),
-  product("swar", "baklava", { nl: "Swar", ar: "سوار", en: "Swar" }, 25, "kg", greenMabrouma),
+  product("mabrouma", "baklava", { nl: "Mabrouma", ar: "مبرومة", en: "Mabrouma" }, 40, "kg", pistachioRolls, true),
+  product("plain-maarouk", "baklava", { nl: "Naturel maarouk", ar: "معروك سادة", en: "Plain maarouk" }, 5, "piece", greenMabrouma),
+  product("swar", "baklava", { nl: "Swar", ar: "سوار", en: "Swar" }, 25, "kg", mabroumaPistachio),
 
   product("halawet-el-jibn", "pastries", { nl: "Halawet El Jibn", ar: "حلاوة الجبن", en: "Halawet El Jibn" }, 20, "kg", halawet, true),
   product("faisaliyat-pistachio", "pastries", { nl: "Faisaliyat met pistache", ar: "فصليات وفستق", en: "Faisaliyat with pistachio" }, 4, "piece", pistachioPastry),
@@ -101,14 +109,14 @@ export const products: Product[] = [
   product("namoura", "pastries", { nl: "Namoura", ar: "نمورة", en: "Namoura" }, 20, "kg", basbousa),
   product("warbat-ashta", "pastries", { nl: "Warbat met ashta", ar: "وربات بالقشطة", en: "Warbat with ashta" }, 20, "kg", warbatPistachio),
 
-  product("ghraybeh", "cookies", { nl: "Ghraybeh", ar: "غريبة", en: "Ghraybeh" }, 20, "kg", barazek),
+  product("ghraybeh", "cookies", { nl: "Ghraybeh", ar: "غريبة", en: "Ghraybeh" }, 20, "kg", petitFourImg),
   product("barazek", "cookies", { nl: "Barazek", ar: "برازق", en: "Barazek" }, 20, "kg", barazek, true),
   product("date-fingers", "cookies", { nl: "Dadelvingers", ar: "أصابع تمر", en: "Date fingers" }, 20, "kg", barazek),
   product("maamoul-walnut", "cookies", { nl: "Maamoul met walnoot", ar: "معمول جوز", en: "Walnut maamoul" }, 22, "kg", barazek),
   product("maamoul-pistachio", "cookies", { nl: "Maamoul met pistache", ar: "معمول فستق", en: "Pistachio maamoul" }, 28, "kg", barazek, true),
   product("maamoul-date", "cookies", { nl: "Maamoul met dadel", ar: "معمول تمر", en: "Date maamoul" }, 20, "kg", barazek),
-  product("petit-four-small", "cookies", { nl: "Petit four klein", ar: "بتيفور صب", en: "Small petit four" }, 10, "kg", barazek),
-  product("petit-four", "cookies", { nl: "Petit four", ar: "بتيفور", en: "Petit four" }, 15, "kg", barazek),
+  product("petit-four-small", "cookies", { nl: "Petit four klein", ar: "بتيفور صب", en: "Small petit four" }, 10, "kg", petitFourImg),
+  product("petit-four", "cookies", { nl: "Petit four", ar: "بتيفور", en: "Petit four" }, 15, "kg", petitFourImg),
   product("natif", "cookies", { nl: "Natif", ar: "ناطف", en: "Natif" }, 7, "piece", barazek),
 
   product("malek-chocolate", "candy", { nl: "Al Malek chocolade", ar: "شوكولا الملك", en: "Al Malek chocolate" }, 25, "kg", chocolateCake, true),
