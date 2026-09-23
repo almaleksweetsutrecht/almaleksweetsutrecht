@@ -25,14 +25,14 @@ const imageBySlug: Record<string, string> = Object.fromEntries(
   fallbackProducts.map((p) => [p.id, p.image]),
 );
 
-const fallbackImage = fallbackProducts[0]!.image;
+const fallbackImage = fallbackProducts[0]?.image ?? "";
 
 export function rowToProduct(row: ProductRow): Product {
   return {
     id: row.slug,
-    category: (["baklava", "syrup", "cakes"].includes(row.category)
+    category: (["cold", "baklava", "pastries", "cookies", "candy"].includes(row.category)
       ? row.category
-      : "baklava") as CategoryId,
+      : "cold") as CategoryId,
     name: { nl: row.name_nl, ar: row.name_ar, en: row.name_en },
     description: { nl: row.desc_nl, ar: row.desc_ar, en: row.desc_en },
     price: Number(row.price),

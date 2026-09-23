@@ -1,18 +1,15 @@
 import type { Localized } from "./i18n";
 
 import baklavaBox from "@/assets/baklava-box.jpg";
-import kolWShkor from "@/assets/kol-w-shkor.jpg";
-import mabroume from "@/assets/mabroume.jpg";
-import warbat from "@/assets/warbat.jpg";
 import barazek from "@/assets/barazek-maamoul.jpg";
-import kunafa from "@/assets/kunafa.jpg";
 import basbousa from "@/assets/basbousa.jpg";
-import halawet from "@/assets/halawet-el-jibn.jpg";
-import mafroukeh from "@/assets/mafroukeh.jpg";
-import pistachioCake from "@/assets/pistachio-cake.jpg";
 import chocolateCake from "@/assets/chocolate-cake.jpg";
+import halawet from "@/assets/halawet-el-jibn.jpg";
+import kunafa from "@/assets/kunafa.jpg";
+import mabroume from "@/assets/mabroume.jpg";
+import mafroukeh from "@/assets/mafroukeh.jpg";
 
-export type CategoryId = "baklava" | "syrup" | "cakes";
+export type CategoryId = "cold" | "baklava" | "pastries" | "cookies" | "candy";
 export type Unit = "kg" | "piece" | "box" | "cake";
 
 export type Product = {
@@ -27,172 +24,102 @@ export type Product = {
   badge?: Localized;
 };
 
+const categoryImages: Record<CategoryId, string> = {
+  cold: halawet,
+  baklava: baklavaBox,
+  pastries: kunafa,
+  cookies: barazek,
+  candy: chocolateCake,
+};
+
+const categoryDescriptions: Record<CategoryId, Localized> = {
+  cold: { nl: "Vers bereid koud dessert uit eigen keuken.", ar: "حلوى باردة محضّرة طازجة في مطبخنا.", en: "Freshly prepared cold dessert from our kitchen." },
+  baklava: { nl: "Dagelijks vers bereid volgens traditioneel recept.", ar: "محضّرة يومياً على الطريقة التقليدية.", en: "Prepared fresh daily to a traditional recipe." },
+  pastries: { nl: "Vers gebakken Syrische specialiteit.", ar: "حلوى سورية مخبوزة طازجة.", en: "Freshly baked Syrian speciality." },
+  cookies: { nl: "Ambachtelijk koekassortiment, vers uit onze bakkerij.", ar: "تشكيلة كعك محضّرة طازجة في مخبزنا.", en: "Handmade cookie selection, fresh from our bakery." },
+  candy: { nl: "Rijke zoete specialiteit uit ons winkelassortiment.", ar: "صنف حلو فاخر من تشكيلتنا.", en: "A rich sweet speciality from our shop selection." },
+};
+
+function product(
+  id: string,
+  category: CategoryId,
+  names: Localized,
+  price: number,
+  unit: Unit,
+  image = categoryImages[category],
+  featured = false,
+): Product {
+  return { id, category, name: names, description: categoryDescriptions[category], price, unit, image, featured };
+}
+
 export const products: Product[] = [
-  {
-    id: "mixed-baklava-box",
-    category: "baklava",
-    price: 24.5,
-    unit: "box",
-    image: baklavaBox,
-    featured: true,
-    name: {
-      nl: "Gemengde Syrische Baklava Doos",
-      ar: "علبة بقلاوة سورية مشكّلة",
-      en: "Mixed Syrian Baklava Box",
-    },
-    description: {
-      nl: "Twaalf soorten baklava in één gouden doos: pistache, cashew, walnoot en amandel, gelaagd met geklaarde boter en lichte siroop.",
-      ar: "اثنا عشر نوعاً من البقلاوة في علبة ذهبية واحدة: فستق، كاجو، جوز ولوز، بطبقات من السمنة الأصلية والقطر الخفيف.",
-      en: "Twelve kinds of baklava in one gold box: pistachio, cashew, walnut and almond, layered with clarified butter and light syrup.",
-    },
-    badge: { nl: "Bestseller", ar: "الأكثر طلباً", en: "Bestseller" },
-  },
-  {
-    id: "kol-w-shkor",
-    category: "baklava",
-    price: 27.0,
-    unit: "kg",
-    image: kolWShkor,
-    featured: true,
-    name: { nl: "Kol W Shkor (Cashewvingers)", ar: "كل وأشكر (أصابع كاجو)", en: "Kol W Shkor (Cashew Fingers)" },
-    description: {
-      nl: "Knapperige rolletjes filodeeg gevuld met romige cashewpasta, licht gedoopt in siroop met bloesemwater.",
-      ar: "أصابع مقرمشة من عجين الفيلو محشوة بمعجون الكاجو الكريمي ومغموسة بقطر ماء الزهر.",
-      en: "Crisp filo fingers filled with creamy cashew paste and lightly dipped in blossom-water syrup.",
-    },
-  },
-  {
-    id: "mabroume-pistachio",
-    category: "baklava",
-    price: 32.0,
-    unit: "kg",
-    image: mabroume,
-    featured: true,
-    name: { nl: "Mabroume met Pistache", ar: "مبرومة بالفستق الحلبي", en: "Mabroume with Pistachio" },
-    description: {
-      nl: "Gedraaide kadaifi-rollen royaal gevuld met Syrische pistache, in dunne schijfjes gesneden zodat het groene hart zichtbaar blijft.",
-      ar: "لفائف مبرومة محشوة بسخاء بالفستق الحلبي وتُقطع رقائق ليظهر قلبها الأخضر.",
-      en: "Twisted kadaifi rolls generously filled with Syrian pistachio, sliced thin so the green heart shows.",
-    },
-    badge: { nl: "Premium", ar: "فاخر", en: "Premium" },
-  },
-  {
-    id: "warbat-cream",
-    category: "baklava",
-    price: 2.75,
-    unit: "piece",
-    image: warbat,
-    name: { nl: "Warbat met Room", ar: "وربات بالقشطة", en: "Warbat with Cream" },
-    description: {
-      nl: "Vierkantjes bladerdeeg met verse ashta-room, poedersuiker en gemalen pistache. Het lekkerst op de dag zelf.",
-      ar: "مربعات من العجين الرقيق محشوة بالقشطة الطازجة مع سكر ناعم وفستق مجروش. ألذّ ما تكون في يومها.",
-      en: "Flaky pastry squares with fresh ashta cream, powdered sugar and ground pistachio. Best on the day.",
-    },
-  },
-  {
-    id: "barazek-maamoul-box",
-    category: "baklava",
-    price: 18.9,
-    unit: "box",
-    image: barazek,
-    name: { nl: "Barazek & Maamoul Doos", ar: "علبة برازق ومعمول", en: "Barazek & Maamoul Box" },
-    description: {
-      nl: "Sesamkoekjes met pistache naast maamoul gevuld met dadels en walnoot — perfect bij thee of als cadeau.",
-      ar: "برازق بالسمسم والفستق مع معمول محشو بالتمر والجوز — مثالية مع الشاي أو كهدية.",
-      en: "Sesame-pistachio barazek beside maamoul filled with dates and walnut — perfect with tea or as a gift.",
-    },
-  },
-  {
-    id: "nabulsi-kunafa",
-    category: "syrup",
-    price: 26.5,
-    unit: "kg",
-    image: kunafa,
-    featured: true,
-    name: { nl: "Nabulsi Kunafa (fijn / grof)", ar: "كنافة نابلسية (ناعمة / خشنة)", en: "Nabulsi Kunafa (fine / coarse)" },
-    description: {
-      nl: "Warme kunafa met gesmolten Nabulsi-kaas, keuze uit fijn of grof deeg, overgoten met siroop en pistache.",
-      ar: "كنافة ساخنة بالجبنة النابلسية، ناعمة أو خشنة، تُسكب عليها القطر وتُزيَّن بالفستق.",
-      en: "Hot kunafa with melted Nabulsi cheese, fine or coarse dough, poured with syrup and topped with pistachio.",
-    },
-    badge: { nl: "Warm uit de oven", ar: "ساخنة من الفرن", en: "Straight from the oven" },
-  },
-  {
-    id: "basbousa-namoora",
-    category: "syrup",
-    price: 19.5,
-    unit: "kg",
-    image: basbousa,
-    name: {
-      nl: "Syrische Basbousa / Namoora met Amandel",
-      ar: "بسبوسة / نمورة سورية باللوز",
-      en: "Syrian Basbousa / Namoora with Almonds",
-    },
-    description: {
-      nl: "Boterzachte griesmeelcake met kokos en yoghurt, bekroond met geblancheerde amandelen en warme siroop.",
-      ar: "كيك السمولينا الطري مع جوز الهند واللبن، مزيّن باللوز المقشّر والقطر الدافئ.",
-      en: "Buttery semolina cake with coconut and yoghurt, crowned with blanched almonds and warm syrup.",
-    },
-  },
-  {
-    id: "halawet-el-jibn",
-    category: "syrup",
-    price: 3.2,
-    unit: "piece",
-    image: halawet,
-    name: { nl: "Halawet El Jibn", ar: "حلاوة الجبن", en: "Halawet El Jibn" },
-    description: {
-      nl: "Zachte kaasrolletjes van griesmeel gevuld met ashta, met rozensiroop en pistache. Damascus op zijn mooist.",
-      ar: "لفائف الجبن الطرية بالسمولينا محشوة بالقشطة مع شراب الورد والفستق. دمشق بأبهى صورها.",
-      en: "Soft semolina-cheese rolls filled with ashta, finished with rose syrup and pistachio. Damascus at its finest.",
-    },
-  },
-  {
-    id: "mafroukeh-cream",
-    category: "syrup",
-    price: 29.5,
-    unit: "kg",
-    image: mafroukeh,
-    name: { nl: "Mafroukeh met Room", ar: "مفروكة بالقشطة", en: "Mafroukeh with Cream" },
-    description: {
-      nl: "Rijke geroosterde griesmeelbasis met boter en siroop, bedekt met dikke ashta-room en hele pistaches.",
-      ar: "قاعدة سمولينا محمّصة بالسمنة والقطر، مغطاة بطبقة سميكة من القشطة والفستق الكامل.",
-      en: "Rich toasted semolina base with butter and syrup, covered in thick ashta cream and whole pistachios.",
-    },
-  },
-  {
-    id: "pistachio-cream-cake",
-    category: "cakes",
-    price: 42.0,
-    unit: "cake",
-    image: pistachioCake,
-    featured: true,
-    name: { nl: "Pistache Roomtaart", ar: "كيك الفستق بالكريما", en: "Pistachio Cream Cake" },
-    description: {
-      nl: "Drie luchtige biscuitlagen met pistachecrème en mascarpone, afgewerkt met pistachekrokant en bladgoud. 8–10 personen.",
-      ar: "ثلاث طبقات من الكيك الهش مع كريمة الفستق والماسكربوني، مزيّنة بالفستق المجروش وورق الذهب. تكفي ٨–١٠ أشخاص.",
-      en: "Three airy sponge layers with pistachio crème and mascarpone, finished with pistachio crunch and gold leaf. Serves 8–10.",
-    },
-  },
-  {
-    id: "royal-chocolate-cake",
-    category: "cakes",
-    price: 39.5,
-    unit: "cake",
-    image: chocolateCake,
-    name: { nl: "Royal Chocolade Laagjestaart", ar: "كيك الشوكولا الملكي", en: "Royal Chocolate Layer Cake" },
-    description: {
-      nl: "Donkere Belgische chocoladecake met glanzende ganache, hazelnootcrunch en 24-karaats gouden accenten. 8–10 personen.",
-      ar: "كيك الشوكولا البلجيكية الداكنة مع غاناش لامع وكرانش البندق ولمسات ذهبية عيار ٢٤. تكفي ٨–١٠ أشخاص.",
-      en: "Dark Belgian chocolate cake with glossy ganache, hazelnut crunch and 24-carat gold accents. Serves 8–10.",
-    },
-  },
+  product("kler", "cold", { nl: "Kler", ar: "كلير", en: "Kler" }, 2, "piece", chocolateCake, true),
+  product("cake-piece", "cold", { nl: "Stuk taart", ar: "كاتو قطع", en: "Cake slice" }, 2.5, "piece", chocolateCake),
+  product("ras-el-abed", "cold", { nl: "Ras El Abed", ar: "راس العبد", en: "Ras El Abed" }, 1, "piece", chocolateCake),
+  product("liliana", "cold", { nl: "Liliana", ar: "ليليانا", en: "Liliana" }, 20, "kg", mafroukeh),
+  product("booza", "cold", { nl: "Arabisch ijs", ar: "بوظة", en: "Arabic ice cream" }, 20, "kg", halawet),
+  product("esh-el-bulbul", "cold", { nl: "Esh El Bulbul", ar: "عش البلبل", en: "Esh El Bulbul" }, 20, "kg", mabroume),
+  product("medium-cake", "cold", { nl: "Middelgrote taart", ar: "قالب كاتو وسط", en: "Medium cake" }, 25, "cake", chocolateCake),
+  product("large-cake", "cold", { nl: "Grote taart", ar: "قالب كاتو كبير", en: "Large cake" }, 30, "cake", chocolateCake),
+  product("mhalaya", "cold", { nl: "Mhalaya", ar: "محلاية", en: "Mhalaya" }, 2.5, "piece", halawet),
+  product("ashta", "cold", { nl: "Ashta-room", ar: "قشطة", en: "Ashta cream" }, 20, "kg", halawet),
+
+  product("classic-mix", "baklava", { nl: "Klassieke mix", ar: "مشكل كلاسيك", en: "Classic mix" }, 35, "kg", baklavaBox, true),
+  product("baklava-mix", "baklava", { nl: "Gemengde baklava", ar: "بقلاوة مشكل", en: "Mixed baklava" }, 35, "kg", baklavaBox, true),
+  product("half-kilo-mix", "baklava", { nl: "Gemengde doos ½ kilo", ar: "نصف كيلو مشكل", en: "Half-kilo mixed box" }, 35, "box", baklavaBox),
+  product("maarouk-ashta", "baklava", { nl: "Maarouk met ashta", ar: "معروك قشطة", en: "Maarouk with ashta" }, 12, "piece", basbousa),
+  product("maarouk", "baklava", { nl: "Maarouk", ar: "معروك", en: "Maarouk" }, 8, "piece", basbousa),
+  product("kunafa-cheese", "baklava", { nl: "Kunafa met kaas", ar: "كنافة جبن", en: "Cheese kunafa" }, 8, "piece", kunafa),
+  product("kunafa-piece", "baklava", { nl: "Stuk kunafa", ar: "قطعة كنافة", en: "Kunafa piece" }, 5, "piece", kunafa),
+  product("mabrouma", "baklava", { nl: "Mabrouma", ar: "مبرومة", en: "Mabrouma" }, 40, "kg", mabroume, true),
+  product("plain-maarouk", "baklava", { nl: "Naturel maarouk", ar: "معروك سادة", en: "Plain maarouk" }, 5, "piece", basbousa),
+  product("swar", "baklava", { nl: "Swar", ar: "سوار", en: "Swar" }, 25, "kg", mabroume),
+
+  product("halawet-el-jibn", "pastries", { nl: "Halawet El Jibn", ar: "حلاوة الجبن", en: "Halawet El Jibn" }, 20, "kg", halawet, true),
+  product("faisaliyat-pistachio", "pastries", { nl: "Faisaliyat met pistache", ar: "فصليات وفستق", en: "Faisaliyat with pistachio" }, 4, "piece", mabroume),
+  product("awama", "pastries", { nl: "Awama", ar: "عوامة", en: "Awama" }, 15, "kg", basbousa),
+  product("nabulsiya", "pastries", { nl: "Nabulsiya", ar: "نابلسية", en: "Nabulsiya" }, 18, "kg", kunafa, true),
+  product("qatayef", "pastries", { nl: "Qatayef", ar: "قطايف", en: "Qatayef" }, 15, "kg", kunafa),
+  product("harissa", "pastries", { nl: "Harissa", ar: "هريسة", en: "Harissa" }, 18, "kg", basbousa),
+  product("pastry-mix", "pastries", { nl: "Gemengde zoetwaren", ar: "مشكل", en: "Mixed sweets" }, 15, "kg", baklavaBox),
+  product("madlouka", "pastries", { nl: "Madlouka", ar: "مدلوقة", en: "Madlouka" }, 20, "kg", mafroukeh),
+  product("kunafa-ashta", "pastries", { nl: "Kunafa met ashta", ar: "كنافة بالقشطة", en: "Kunafa with ashta" }, 20, "kg", kunafa),
+  product("shuaibiyat-ashta", "pastries", { nl: "Shuaibiyat met ashta", ar: "شعيبيات قشطة", en: "Shuaibiyat with ashta" }, 2.5, "piece", halawet),
+  product("namoura", "pastries", { nl: "Namoura", ar: "نمورة", en: "Namoura" }, 20, "kg", basbousa),
+  product("warbat-ashta", "pastries", { nl: "Warbat met ashta", ar: "وربات بالقشطة", en: "Warbat with ashta" }, 20, "kg", halawet),
+
+  product("ghraybeh", "cookies", { nl: "Ghraybeh", ar: "غريبة", en: "Ghraybeh" }, 20, "kg", barazek),
+  product("barazek", "cookies", { nl: "Barazek", ar: "برازق", en: "Barazek" }, 20, "kg", barazek, true),
+  product("date-fingers", "cookies", { nl: "Dadelvingers", ar: "أصابع تمر", en: "Date fingers" }, 20, "kg", barazek),
+  product("maamoul-walnut", "cookies", { nl: "Maamoul met walnoot", ar: "معمول جوز", en: "Walnut maamoul" }, 22, "kg", barazek),
+  product("maamoul-pistachio", "cookies", { nl: "Maamoul met pistache", ar: "معمول فستق", en: "Pistachio maamoul" }, 28, "kg", barazek, true),
+  product("maamoul-date", "cookies", { nl: "Maamoul met dadel", ar: "معمول تمر", en: "Date maamoul" }, 20, "kg", barazek),
+  product("petit-four-small", "cookies", { nl: "Petit four klein", ar: "بتيفور صب", en: "Small petit four" }, 10, "kg", barazek),
+  product("petit-four", "cookies", { nl: "Petit four", ar: "بتيفور", en: "Petit four" }, 15, "kg", barazek),
+  product("natif", "cookies", { nl: "Natif", ar: "ناطف", en: "Natif" }, 7, "piece", barazek),
+
+  product("malek-chocolate", "candy", { nl: "Al Malek chocolade", ar: "شوكولا الملك", en: "Al Malek chocolate" }, 25, "kg", chocolateCake, true),
+  product("premium-chocolate", "candy", { nl: "Premium chocolade", ar: "شوكولا ممتازة", en: "Premium chocolate" }, 35, "kg", chocolateCake),
+  product("chocolate", "candy", { nl: "Chocolade", ar: "شوكولا", en: "Chocolate" }, 20, "kg", chocolateCake),
+  product("hospitality-box", "candy", { nl: "Gastendoos", ar: "علب ضيافة", en: "Hospitality box" }, 0.5, "piece", chocolateCake),
+  product("almond-harissa", "candy", { nl: "Amandelharissa", ar: "هريسة لوز", en: "Almond harissa" }, 18, "kg", basbousa),
+  product("deluxe-chocolate", "candy", { nl: "Deluxe chocolade", ar: "شوكولا ديلوكس", en: "Deluxe chocolate" }, 30, "kg", chocolateCake),
+  product("salwa", "candy", { nl: "Salwa", ar: "من السلوى", en: "Salwa" }, 20, "kg", halawet),
+  product("mlabas", "candy", { nl: "Mlabas", ar: "ملبس", en: "Mlabas" }, 15, "kg", barazek),
+  product("wedding-box", "candy", { nl: "Feestdoos", ar: "علب أفراح", en: "Celebration box" }, 1, "piece", chocolateCake),
+  product("nuts-small", "candy", { nl: "Notenmix klein", ar: "مكسرات", en: "Small mixed nuts" }, 8, "piece", mabroume),
+  product("nuts", "candy", { nl: "Notenmix", ar: "مكسرات", en: "Mixed nuts" }, 15, "kg", mabroume),
+  product("nougat", "candy", { nl: "Nougat", ar: "نوغا", en: "Nougat" }, 20, "kg", halawet),
+  product("raha", "candy", { nl: "Raha", ar: "راحة", en: "Raha" }, 24, "kg", halawet),
+  product("caramel", "candy", { nl: "Karamel", ar: "كراميل", en: "Caramel" }, 10, "kg", chocolateCake),
 ];
 
-export const categories: { id: CategoryId; key: "cat_baklava" | "cat_syrup" | "cat_cakes" }[] = [
+export const categories: { id: CategoryId; key: "cat_cold" | "cat_baklava" | "cat_pastries" | "cat_cookies" | "cat_candy" }[] = [
+  { id: "cold", key: "cat_cold" },
   { id: "baklava", key: "cat_baklava" },
-  { id: "syrup", key: "cat_syrup" },
-  { id: "cakes", key: "cat_cakes" },
+  { id: "pastries", key: "cat_pastries" },
+  { id: "cookies", key: "cat_cookies" },
+  { id: "candy", key: "cat_candy" },
 ];
 
 export const unitKey: Record<Unit, "per_kg" | "per_piece" | "per_box" | "per_cake"> = {

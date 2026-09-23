@@ -99,7 +99,7 @@ type AdminProductRow = {
 type ProductForm = {
   id?: string;
   slug: string;
-  category: "baklava" | "syrup" | "cakes";
+  category: "cold" | "baklava" | "pastries" | "cookies" | "candy";
   name_nl: string;
   name_ar: string;
   name_en: string;
@@ -116,7 +116,7 @@ type ProductForm = {
 
 const emptyProduct: ProductForm = {
   slug: "",
-  category: "baklava",
+  category: "cold",
   name_nl: "",
   name_ar: "",
   name_en: "",
@@ -468,9 +468,11 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                     setEditing({ ...editing, category: e.target.value as ProductForm["category"] })
                   }
                 >
-                  <option value="baklava">Baklava & droge koek</option>
-                  <option value="syrup">Warme & siroopdesserts</option>
-                  <option value="cakes">Taarten</option>
+                  <option value="cold">Koelgebak</option>
+                  <option value="baklava">Baklava</option>
+                  <option value="pastries">Gebak</option>
+                  <option value="cookies">Koekjes</option>
+                  <option value="candy">Snoep & specialiteiten</option>
                 </select>
               </div>
               <div className="grid gap-1.5">
