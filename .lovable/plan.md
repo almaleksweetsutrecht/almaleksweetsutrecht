@@ -2,8 +2,8 @@
 
 ## What will change
 - Remove every existing product from the live menu and its built-in fallback list.
-- Add the products and prices visible in the four supplied menu photos.
-- Replace the old category filters with Cold Desserts, Baklava, Pastries, and Cookies in Dutch, Arabic, and English.
+- Add the products and prices visible in the five supplied menu photos.
+- Replace the old category filters with Cold Desserts, Baklava, Pastries, Cookies, and Ice Cream in Dutch, Arabic, and English.
 - Use the closest existing food photos for each new item so every product remains visually complete.
 
 ## Price and unit handling
