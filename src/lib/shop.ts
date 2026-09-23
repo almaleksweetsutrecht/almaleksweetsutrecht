@@ -30,7 +30,7 @@ const fallbackImage = fallbackProducts[0]?.image ?? "";
 export function rowToProduct(row: ProductRow): Product {
   return {
     id: row.slug,
-    category: (["cold", "baklava", "pastries", "cookies", "icecream"].includes(row.category)
+    category: (["cold", "baklava", "pastries", "cookies", "candy"].includes(row.category)
       ? row.category
       : "cold") as CategoryId,
     name: { nl: row.name_nl, ar: row.name_ar, en: row.name_en },

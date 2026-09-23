@@ -99,7 +99,7 @@ type AdminProductRow = {
 type ProductForm = {
   id?: string;
   slug: string;
-  category: "cold" | "baklava" | "pastries" | "cookies" | "icecream";
+  category: "cold" | "baklava" | "pastries" | "cookies" | "candy";
   name_nl: string;
   name_ar: string;
   name_en: string;
@@ -472,7 +472,7 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                   <option value="baklava">Baklava</option>
                   <option value="pastries">Gebak</option>
                   <option value="cookies">Koekjes</option>
-                  <option value="icecream">IJs & specialiteiten</option>
+                  <option value="candy">Snoep & specialiteiten</option>
                 </select>
               </div>
               <div className="grid gap-1.5">

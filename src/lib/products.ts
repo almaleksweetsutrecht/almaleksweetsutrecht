@@ -9,7 +9,7 @@ import kunafa from "@/assets/kunafa.jpg";
 import mabroume from "@/assets/mabroume.jpg";
 import mafroukeh from "@/assets/mafroukeh.jpg";
 
-export type CategoryId = "cold" | "baklava" | "pastries" | "cookies" | "icecream";
+export type CategoryId = "cold" | "baklava" | "pastries" | "cookies" | "candy";
 export type Unit = "kg" | "piece" | "box" | "cake";
 
 export type Product = {
@@ -29,7 +29,7 @@ const categoryImages: Record<CategoryId, string> = {
   baklava: baklavaBox,
   pastries: kunafa,
   cookies: barazek,
-  icecream: chocolateCake,
+  candy: chocolateCake,
 };
 
 const categoryDescriptions: Record<CategoryId, Localized> = {
@@ -37,7 +37,7 @@ const categoryDescriptions: Record<CategoryId, Localized> = {
   baklava: { nl: "Dagelijks vers bereid volgens traditioneel recept.", ar: "محضّرة يومياً على الطريقة التقليدية.", en: "Prepared fresh daily to a traditional recipe." },
   pastries: { nl: "Vers gebakken Syrische specialiteit.", ar: "حلوى سورية مخبوزة طازجة.", en: "Freshly baked Syrian speciality." },
   cookies: { nl: "Ambachtelijk koekassortiment, vers uit onze bakkerij.", ar: "تشكيلة كعك محضّرة طازجة في مخبزنا.", en: "Handmade cookie selection, fresh from our bakery." },
-  icecream: { nl: "Rijke zoete specialiteit uit ons winkelassortiment.", ar: "صنف حلو فاخر من تشكيلتنا.", en: "A rich sweet speciality from our shop selection." },
+  candy: { nl: "Rijke zoete specialiteit uit ons winkelassortiment.", ar: "صنف حلو فاخر من تشكيلتنا.", en: "A rich sweet speciality from our shop selection." },
 };
 
 function product(
@@ -98,28 +98,28 @@ export const products: Product[] = [
   product("petit-four", "cookies", { nl: "Petit four", ar: "بتيفور", en: "Petit four" }, 15, "kg", barazek),
   product("natif", "cookies", { nl: "Natif", ar: "ناطف", en: "Natif" }, 7, "piece", barazek),
 
-  product("malek-chocolate", "icecream", { nl: "Al Malek chocolade", ar: "شوكولا الملك", en: "Al Malek chocolate" }, 25, "kg", chocolateCake, true),
-  product("premium-chocolate", "icecream", { nl: "Premium chocolade", ar: "شوكولا ممتازة", en: "Premium chocolate" }, 35, "kg", chocolateCake),
-  product("chocolate", "icecream", { nl: "Chocolade", ar: "شوكولا", en: "Chocolate" }, 20, "kg", chocolateCake),
-  product("hospitality-box", "icecream", { nl: "Gastendoos", ar: "علب ضيافة", en: "Hospitality box" }, 0.5, "piece", chocolateCake),
-  product("almond-harissa", "icecream", { nl: "Amandelharissa", ar: "هريسة لوز", en: "Almond harissa" }, 18, "kg", basbousa),
-  product("deluxe-chocolate", "icecream", { nl: "Deluxe chocolade", ar: "شوكولا ديلوكس", en: "Deluxe chocolate" }, 30, "kg", chocolateCake),
-  product("salwa", "icecream", { nl: "Salwa", ar: "من السلوى", en: "Salwa" }, 20, "kg", halawet),
-  product("mlabas", "icecream", { nl: "Mlabas", ar: "ملبس", en: "Mlabas" }, 15, "kg", barazek),
-  product("wedding-box", "icecream", { nl: "Feestdoos", ar: "علب أفراح", en: "Celebration box" }, 1, "piece", chocolateCake),
-  product("nuts-small", "icecream", { nl: "Notenmix klein", ar: "مكسرات", en: "Small mixed nuts" }, 8, "piece", mabroume),
-  product("nuts", "icecream", { nl: "Notenmix", ar: "مكسرات", en: "Mixed nuts" }, 15, "kg", mabroume),
-  product("nougat", "icecream", { nl: "Nougat", ar: "نوغا", en: "Nougat" }, 20, "kg", halawet),
-  product("raha", "icecream", { nl: "Raha", ar: "راحة", en: "Raha" }, 24, "kg", halawet),
-  product("caramel", "icecream", { nl: "Karamel", ar: "كراميل", en: "Caramel" }, 10, "kg", chocolateCake),
+  product("malek-chocolate", "candy", { nl: "Al Malek chocolade", ar: "شوكولا الملك", en: "Al Malek chocolate" }, 25, "kg", chocolateCake, true),
+  product("premium-chocolate", "candy", { nl: "Premium chocolade", ar: "شوكولا ممتازة", en: "Premium chocolate" }, 35, "kg", chocolateCake),
+  product("chocolate", "candy", { nl: "Chocolade", ar: "شوكولا", en: "Chocolate" }, 20, "kg", chocolateCake),
+  product("hospitality-box", "candy", { nl: "Gastendoos", ar: "علب ضيافة", en: "Hospitality box" }, 0.5, "piece", chocolateCake),
+  product("almond-harissa", "candy", { nl: "Amandelharissa", ar: "هريسة لوز", en: "Almond harissa" }, 18, "kg", basbousa),
+  product("deluxe-chocolate", "candy", { nl: "Deluxe chocolade", ar: "شوكولا ديلوكس", en: "Deluxe chocolate" }, 30, "kg", chocolateCake),
+  product("salwa", "candy", { nl: "Salwa", ar: "من السلوى", en: "Salwa" }, 20, "kg", halawet),
+  product("mlabas", "candy", { nl: "Mlabas", ar: "ملبس", en: "Mlabas" }, 15, "kg", barazek),
+  product("wedding-box", "candy", { nl: "Feestdoos", ar: "علب أفراح", en: "Celebration box" }, 1, "piece", chocolateCake),
+  product("nuts-small", "candy", { nl: "Notenmix klein", ar: "مكسرات", en: "Small mixed nuts" }, 8, "piece", mabroume),
+  product("nuts", "candy", { nl: "Notenmix", ar: "مكسرات", en: "Mixed nuts" }, 15, "kg", mabroume),
+  product("nougat", "candy", { nl: "Nougat", ar: "نوغا", en: "Nougat" }, 20, "kg", halawet),
+  product("raha", "candy", { nl: "Raha", ar: "راحة", en: "Raha" }, 24, "kg", halawet),
+  product("caramel", "candy", { nl: "Karamel", ar: "كراميل", en: "Caramel" }, 10, "kg", chocolateCake),
 ];
 
-export const categories: { id: CategoryId; key: "cat_cold" | "cat_baklava" | "cat_pastries" | "cat_cookies" | "cat_icecream" }[] = [
+export const categories: { id: CategoryId; key: "cat_cold" | "cat_baklava" | "cat_pastries" | "cat_cookies" | "cat_candy" }[] = [
   { id: "cold", key: "cat_cold" },
   { id: "baklava", key: "cat_baklava" },
   { id: "pastries", key: "cat_pastries" },
   { id: "cookies", key: "cat_cookies" },
-  { id: "icecream", key: "cat_icecream" },
+  { id: "candy", key: "cat_candy" },
 ];
 
 export const unitKey: Record<Unit, "per_kg" | "per_piece" | "per_box" | "per_cake"> = {

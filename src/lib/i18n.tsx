@@ -45,7 +45,7 @@ export const dict = {
   cat_baklava: { nl: "Baklava", ar: "بقلاوة", en: "Baklava" },
   cat_pastries: { nl: "Gebak", ar: "حلويات", en: "Pastries" },
   cat_cookies: { nl: "Koekjes", ar: "كعك", en: "Cookies" },
-  cat_icecream: { nl: "IJs & specialiteiten", ar: "بوظة وحلويات", en: "Ice cream & specials" },
+  cat_candy: { nl: "Snoep & specialiteiten", ar: "حلويات وسكاكر", en: "Sweets & specialities" },
   add_to_cart: { nl: "In de mand", ar: "أضف إلى السلة", en: "Add to cart" },
   added: { nl: "toegevoegd aan je mand", ar: "أُضيف إلى سلتك", en: "added to your cart" },
   per_kg: { nl: "per kg", ar: "للكيلو", en: "per kg" },
