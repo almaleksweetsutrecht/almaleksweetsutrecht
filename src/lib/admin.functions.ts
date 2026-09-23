@@ -111,7 +111,7 @@ const productSchema = z.object({
     .min(2)
     .max(80)
     .regex(/^[a-z0-9-]+$/),
-  category: z.enum(["baklava", "syrup", "cakes"]),
+  category: z.enum(["cold", "baklava", "pastries", "cookies", "icecream"]),
   name_nl: z.string().trim().min(1).max(160),
   name_ar: z.string().trim().min(1).max(160),
   name_en: z.string().trim().min(1).max(160),
