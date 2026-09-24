@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CalendarCheck, Palette, Truck, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 import customCakeImg from "@/assets/custom-cake.jpg";
 import pistachioCake from "@/assets/pistachio-cake.jpg";
 import chocolateCake from "@/assets/chocolate-cake.jpg";
-import { CustomCakeDialog } from "@/components/CustomCakeDialog";
 import { Reveal } from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n";
+import { STORE, whatsappLink } from "@/lib/store-info";
 
 export const Route = createFileRoute("/custom-cakes")({
   head: () => ({
