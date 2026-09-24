@@ -58,18 +58,6 @@ function CustomCakesPage() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-6xl gap-6 px-4 py-20 sm:px-6 md:grid-cols-3">
-        {steps.map((s, i) => (
-          <Reveal key={s.title} delay={i * 100}>
-            <div className="h-full rounded-xl border border-border bg-card p-7 shadow-royal transition-all duration-500 hover:-translate-y-1 hover:border-gold/60">
-              <s.icon className="h-7 w-7 text-gold-deep" />
-              <h2 className="mt-4 font-display text-xl">{s.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
-            </div>
-          </Reveal>
-        ))}
-      </section>
-
       <section className="bg-secondary py-16">
         <div className="mx-auto grid max-w-6xl gap-6 px-4 sm:px-6 md:grid-cols-2">
           {[
