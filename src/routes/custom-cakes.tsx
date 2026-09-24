@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CalendarCheck, Palette, Truck, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 import customCakeImg from "@/assets/custom-cake.jpg";
 import pistachioCake from "@/assets/pistachio-cake.jpg";
 import chocolateCake from "@/assets/chocolate-cake.jpg";
-import { CustomCakeDialog } from "@/components/CustomCakeDialog";
 import { Reveal } from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n";
+import { STORE, whatsappLink } from "@/lib/store-info";
 
 export const Route = createFileRoute("/custom-cakes")({
   head: () => ({
@@ -31,11 +31,7 @@ export const Route = createFileRoute("/custom-cakes")({
 function CustomCakesPage() {
   const { t } = useI18n();
 
-  const steps = [
-    { icon: Palette, title: t("size"), text: t("cakes_sub") },
-    { icon: CalendarCheck, title: t("date"), text: t("photo_hint") },
-    { icon: Truck, title: t("fulfilment"), text: `${t("pickup")} · ${t("delivery")}` },
-  ];
+  const message = `*${STORE.name} — ${t("cakes_title")}*\n${t("reserve_now")}`;
 
   return (
     <>
@@ -52,26 +48,14 @@ function CustomCakesPage() {
           <h1 className="font-display text-4xl text-gold-shine sm:text-5xl">{t("cakes_title")}</h1>
           <p className="mt-5 text-cream/85">{t("cakes_sub")}</p>
           <div className="mt-8">
-            <CustomCakeDialog>
-              <Button variant="gold" size="xl" className="glow-gold">
+            <Button asChild variant="gold" size="xl" className="glow-gold">
+              <a href={whatsappLink(message)} target="_blank" rel="noreferrer">
                 <Sparkles />
                 {t("reserve_now")}
-              </Button>
-            </CustomCakeDialog>
+              </a>
+            </Button>
           </div>
         </div>
-      </section>
-
-      <section className="mx-auto grid max-w-6xl gap-6 px-4 py-20 sm:px-6 md:grid-cols-3">
-        {steps.map((s, i) => (
-          <Reveal key={s.title} delay={i * 100}>
-            <div className="h-full rounded-xl border border-border bg-card p-7 shadow-royal transition-all duration-500 hover:-translate-y-1 hover:border-gold/60">
-              <s.icon className="h-7 w-7 text-gold-deep" />
-              <h2 className="mt-4 font-display text-xl">{s.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
-            </div>
-          </Reveal>
-        ))}
       </section>
 
       <section className="bg-secondary py-16">
