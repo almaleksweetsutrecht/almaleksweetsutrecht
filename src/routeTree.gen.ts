@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CustomCakesRouteImport } from './routes/custom-cakes'
 import { Route as MenuRouteImport } from './routes/menu'
+import { Route as ApiPublicProductImageNameRouteImport } from './routes/api/public/product-image.$name'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,12 @@ const MenuRoute = MenuRouteImport.update({
   path: '/menu',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicProductImageNameRoute =
+  ApiPublicProductImageNameRouteImport.update({
+    id: '/api/public/product-image/$name',
+    path: '/api/public/product-image/$name',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +54,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/custom-cakes': typeof CustomCakesRoute
   '/menu': typeof MenuRoute
+  '/api/public/product-image/$name': typeof ApiPublicProductImageNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +62,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/custom-cakes': typeof CustomCakesRoute
   '/menu': typeof MenuRoute
+  '/api/public/product-image/$name': typeof ApiPublicProductImageNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +71,33 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/custom-cakes': typeof CustomCakesRoute
   '/menu': typeof MenuRoute
+  '/api/public/product-image/$name': typeof ApiPublicProductImageNameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/contact' | '/custom-cakes' | '/menu'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/contact'
+    | '/custom-cakes'
+    | '/menu'
+    | '/api/public/product-image/$name'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/contact' | '/custom-cakes' | '/menu'
-  id: '__root__' | '/' | '/admin' | '/contact' | '/custom-cakes' | '/menu'
+  to:
+    | '/'
+    | '/admin'
+    | '/contact'
+    | '/custom-cakes'
+    | '/menu'
+    | '/api/public/product-image/$name'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/contact'
+    | '/custom-cakes'
+    | '/menu'
+    | '/api/public/product-image/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +106,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CustomCakesRoute: typeof CustomCakesRoute
   MenuRoute: typeof MenuRoute
+  ApiPublicProductImageNameRoute: typeof ApiPublicProductImageNameRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MenuRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/product-image/$name': {
+      id: '/api/public/product-image/$name'
+      path: '/api/public/product-image/$name'
+      fullPath: '/api/public/product-image/$name'
+      preLoaderRoute: typeof ApiPublicProductImageNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +162,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CustomCakesRoute: CustomCakesRoute,
   MenuRoute: MenuRoute,
+  ApiPublicProductImageNameRoute: ApiPublicProductImageNameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
