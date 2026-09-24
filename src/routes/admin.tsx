@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { KeyRound, LogOut, Plus, RefreshCw, Trash2 } from "lucide-react";
+import { Camera, ImageOff, KeyRound, LogOut, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -19,7 +19,9 @@ import {
   adminSaveProduct,
   adminSetCakeStatus,
   adminSetOrderStatus,
+  adminUploadImage,
 } from "@/lib/admin.functions";
+import { fallbackImage, imageBySlug } from "@/lib/shop";
 import { money } from "@/lib/i18n";
 
 export const Route = createFileRoute("/admin")({
@@ -448,7 +450,6 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                   ["name_en", "Naam EN"],
                   ["price", "Prijs (€)"],
                   ["sort_order", "Sortering"],
-                  ["image_url", "Afbeelding URL (optioneel)"],
                 ] as [keyof ProductForm, string][]
               ).map(([field, label]) => (
                 <div key={field} className="grid gap-1.5">
@@ -459,6 +460,12 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                   />
                 </div>
               ))}
+              <PhotoPicker
+                token={token}
+                slug={editing.slug}
+                value={editing.image_url}
+                onChange={(url) => setEditing((e) => (e ? { ...e, image_url: url } : e))}
+              />
               <div className="grid gap-1.5">
                 <Label>Categorie</Label>
                 <select
@@ -545,12 +552,19 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                 key={p.id}
                 className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4"
               >
-                <div>
+                <div className="flex items-center gap-3">
+                  <img
+                    src={p.image_url || imageBySlug[p.slug] || fallbackImage}
+                    alt=""
+                    className="h-14 w-14 rounded-lg object-cover border border-gold/30"
+                  />
+                  <div>
                   <p className="font-semibold">{p.name_nl}</p>
                   <p className="text-xs text-muted-foreground">
                     {p.slug} · {p.category} · {money(Number(p.price))} ·{" "}
                     {p.available ? "op voorraad" : "uitverkocht"}
                   </p>
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <Button
@@ -651,3 +665,82 @@ const statusLabel: Record<Status, string> = {
   ready: "Klaar",
   delivered: "Bezorgd",
 };
+
+async function compressImage(file: File): Promise<string> {
+  const bmp = await createImageBitmap(file);
+  const max = 1400;
+  const scale = Math.min(1, max / Math.max(bmp.width, bmp.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bmp.width * scale);
+  canvas.height = Math.round(bmp.height * scale);
+  canvas.getContext("2d")!.drawImage(bmp, 0, 0, canvas.width, canvas.height);
+  const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+  return dataUrl.split(",")[1] ?? "";
+}
+
+function PhotoPicker({
+  token,
+  slug,
+  value,
+  onChange,
+}: {
+  token: string;
+  slug: string;
+  value: string;
+  onChange: (url: string) => void;
+}) {
+  const upload = useServerFn(adminUploadImage);
+  const [busy, setBusy] = useState(false);
+  const preview = value || imageBySlug[slug] || fallbackImage;
+
+  async function onFile(file: File | undefined) {
+    if (!file) return;
+    setBusy(true);
+    try {
+      const base64 = await compressImage(file);
+      const res = await upload({ data: { token, base64, contentType: "image/jpeg" } });
+      onChange(res.url);
+      toast.success("Foto geüpload — klik Opslaan");
+    } catch {
+      toast.error("Foto uploaden mislukt");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="grid gap-2 sm:col-span-2">
+      <Label>Foto</Label>
+      <div className="flex flex-wrap items-center gap-3">
+        <img
+          src={preview}
+          alt=""
+          className="h-24 w-24 rounded-lg object-cover border border-gold/40"
+        />
+        <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-gold/60 px-3 py-2 text-sm text-gold">
+          <Camera className="h-4 w-4" />
+          {busy ? "Uploaden..." : value ? "Foto wijzigen" : "Foto toevoegen"}
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            disabled={busy}
+            onChange={(e) => {
+              void onFile(e.target.files?.[0]);
+              e.target.value = "";
+            }}
+          />
+        </label>
+        {value && (
+          <Button type="button" size="sm" variant="goldOutline" onClick={() => onChange("")}>
+            <ImageOff />
+            Foto verwijderen
+          </Button>
+        )}
+      </div>
+      <p className="text-xs text-muted-foreground">
+        Kies een foto van je telefoon of maak er direct een. Zonder eigen foto wordt de standaardfoto getoond.
+      </p>
+    </div>
+  );
+}
