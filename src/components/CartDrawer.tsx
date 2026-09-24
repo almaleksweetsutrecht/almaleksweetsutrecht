@@ -180,18 +180,10 @@ export function CartDrawer() {
               </div>
             ))}
 
-            <div className="grid grid-cols-2 gap-2 pt-2">
-              {(["pickup", "delivery"] as Mode[]).map((m) => (
-                <Button
-                  key={m}
-                  variant={mode === m ? "gold" : "goldOutline"}
-                  size="sm"
-                  onClick={() => setMode(m)}
-                  className="h-11 whitespace-normal text-xs"
-                >
-                  {t(m)}
-                </Button>
-              ))}
+            <div className="pt-2">
+              <div className="flex h-11 items-center justify-center rounded-md border border-gold bg-secondary text-xs font-medium text-gold">
+                {t("pickup")}
+              </div>
             </div>
 
             <div className="grid gap-2">
@@ -272,10 +264,6 @@ export function CartDrawer() {
               <div className="flex justify-between">
                 <span>{t("subtotal")}</span>
                 <span>{money(subtotal)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>{t("delivery_fee")}</span>
-                <span>{mode === "pickup" || fee === 0 ? t("free") : money(fee)}</span>
               </div>
               <div className="flex justify-between font-display text-lg text-gold-deep">
                 <span>{t("total")}</span>
