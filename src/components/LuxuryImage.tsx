@@ -3,8 +3,7 @@ import {
   useRef,
   type CSSProperties,
   type PointerEvent as ReactPointerEvent,
-}
-from "react";
+} from "react";
 
 type LuxuryImageProps = {
   src: string;

@@ -28,14 +28,16 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Verse Syrische zoetwaren in Utrecht: baklava, kunafa, mabroume en taarten op maat. Online bestellen voor ophalen of bezorging.",
+          "Verse Syrische zoetwaren in Utrecht: baklava, kunafa, mabroume en taarten op maat. Online reserveren en ophalen in de winkel.",
       },
       { property: "og:title", content: "Al Malek Sweets — Syrische zoetwaren in Utrecht" },
       {
         property: "og:description",
         content:
-          "Handgemaakte baklava, kunafa en luxe taarten met echte pistache. Bestel online voor ophalen of bezorging in Utrecht.",
+          "Handgemaakte baklava, kunafa en luxe taarten met echte pistache. Reserveer online en haal af in Utrecht.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,
@@ -51,7 +53,7 @@ function Home() {
     { src: pistachioRollsAsset.url, alt: "Mabrouma rollen gevuld met pistache", className: "lg:col-span-4" },
     { src: pistachioFlowersAsset.url, alt: "Krokante pistachegebakjes", className: "lg:col-span-3" },
     { src: creamyDessertAsset.url, alt: "Romig dessert met gemalen pistache", className: "lg:col-span-4" },
-    { src: baklavaSquaresAsset.url, alt: "Baklava vierkantjes met pistache", className: "lg:col-span-5" },
+    { src: baklavaSquaresAsset.url, alt: "Baklava vierkantjes met pistache", className: "lg:col-span-12" },
   ];
 
   return (
