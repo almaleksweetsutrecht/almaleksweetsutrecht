@@ -2,9 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Sparkles } from "lucide-react";
 
 import customCakeImg from "@/assets/custom-cake.jpg";
-import pistachioCake from "@/assets/pistachio-cake.jpg";
-import chocolateCake from "@/assets/chocolate-cake.jpg";
-import { Reveal } from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n";
 import { STORE, whatsappLink } from "@/lib/store-info";
@@ -58,29 +55,6 @@ function CustomCakesPage() {
         </div>
       </section>
 
-      <section className="bg-secondary py-16">
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 sm:px-6 md:grid-cols-2">
-          {[
-            { img: pistachioCake, label: t("flavor_pistachio") },
-            { img: chocolateCake, label: t("flavor_chocolate") },
-          ].map((c, i) => (
-            <Reveal key={c.label} delay={i * 120}>
-              <div className="group relative overflow-hidden rounded-2xl border border-gold/30 shadow-royal">
-                <img
-                  src={c.img}
-                  alt={c.label}
-                  loading="lazy"
-                  width={900}
-                  height={700}
-                  className="h-72 w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-royal-deep/85 to-transparent" />
-                <p className="absolute bottom-5 start-6 font-display text-2xl text-gold">{c.label}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
     </>
   );
 }
