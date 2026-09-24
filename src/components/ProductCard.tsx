@@ -2,6 +2,7 @@ import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { LuxuryImage } from "@/components/LuxuryImage";
 import { useCart } from "@/lib/cart";
 import { money, useI18n } from "@/lib/i18n";
 import { unitKey, type Product } from "@/lib/products";
@@ -13,13 +14,12 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-royal transition-all duration-500 hover:-translate-y-2 hover:border-gold/60 hover:shadow-[0_30px_60px_-24px_var(--gold-deep)]">
       <div className="relative aspect-4/3 overflow-hidden">
-        <img
+        <LuxuryImage
           src={product.image}
           alt={tl(product.name)}
-          loading="lazy"
-          width={900}
-          height={700}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+          depth={0.025}
+          className="h-full w-full rounded-none border-0"
+          imageClassName="object-cover transition-transform duration-700 group-hover:scale-105"
         />
         <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-royal-deep/70 via-transparent to-transparent opacity-70" />
         {product.badge && (
