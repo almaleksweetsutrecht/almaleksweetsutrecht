@@ -166,3 +166,28 @@ export const adminChangePin = createServerFn({ method: "POST" })
     if (error) throw new Error("Could not change PIN");
     return { ok: true };
   });
+
+export const adminUploadImage = createServerFn({ method: "POST" })
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        token: z.string().uuid(),
+        base64: z.string().min(10).max(8_000_000),
+        contentType: z.enum(["image/jpeg", "image/png", "image/webp"]),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data }) => {
+    const db = await requireAdmin(data.token);
+    const ext = data.contentType.split("/")[1];
+    const name = `${crypto.randomUUID()}.${ext}`;
+    const bytes = Uint8Array.from(atob(data.base64), (c) => c.charCodeAt(0));
+    const { error } = await db.storage
+      .from("product-images")
+      .upload(name, bytes, { contentType: data.contentType, upsert: false });
+    if (error) {
+      console.error("upload failed", error.message);
+      throw new Error("Upload failed");
+    }
+    return { url: `/api/public/product-image/${name}` };
+  });

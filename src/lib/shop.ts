@@ -21,11 +21,11 @@ export type ProductRow = {
   sort_order: number;
 };
 
-const imageBySlug: Record<string, string> = Object.fromEntries(
+export const imageBySlug: Record<string, string> = Object.fromEntries(
   fallbackProducts.map((p) => [p.id, p.image]),
 );
 
-const fallbackImage = fallbackProducts[0]?.image ?? "";
+export const fallbackImage = fallbackProducts[0]?.image ?? "";
 
 export function rowToProduct(row: ProductRow): Product {
   return {
