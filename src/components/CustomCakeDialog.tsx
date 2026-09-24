@@ -66,7 +66,6 @@ export function CustomCakeDialog({ children }: { children: ReactNode }) {
       `${t("occasion")}: ${t(occasion)}`,
       `${t("layers")}: ${layers}`,
       `${t("flavor")}: ${t(flavour)}`,
-      `${t("fulfilment")}: ${t("pickup")}`,
       `${t("date")}: ${form.date} ${form.time}`,
       `${t("your_name")}: ${form.name}`,
       `${t("phone")}: ${form.phone}`,
