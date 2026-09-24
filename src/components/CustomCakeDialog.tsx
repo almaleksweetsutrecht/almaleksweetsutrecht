@@ -77,6 +77,7 @@ export function CustomCakeDialog({ children }: { children: ReactNode }) {
       .filter(Boolean)
       .join("\n");
 
+    window.open(whatsappLink(message), "_blank", "noreferrer");
     try {
       await sendRequest({
         data: {
@@ -97,7 +98,6 @@ export function CustomCakeDialog({ children }: { children: ReactNode }) {
       /* WhatsApp still carries the request */
     }
 
-    window.open(whatsappLink(message), "_blank", "noreferrer");
     toast.success(t("order_sent"));
     setOpen(false);
   };
