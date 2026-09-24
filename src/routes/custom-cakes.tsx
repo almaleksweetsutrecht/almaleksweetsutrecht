@@ -31,11 +31,7 @@ export const Route = createFileRoute("/custom-cakes")({
 function CustomCakesPage() {
   const { t } = useI18n();
 
-  const steps = [
-    { icon: Palette, title: t("size"), text: t("cakes_sub") },
-    { icon: CalendarCheck, title: t("date"), text: t("photo_hint") },
-    { icon: Truck, title: t("fulfilment"), text: `${t("pickup")} · ${t("delivery")}` },
-  ];
+  const message = `*${STORE.name} — ${t("cakes_title")}*\n${t("reserve_now")}`;
 
   return (
     <>
@@ -52,12 +48,12 @@ function CustomCakesPage() {
           <h1 className="font-display text-4xl text-gold-shine sm:text-5xl">{t("cakes_title")}</h1>
           <p className="mt-5 text-cream/85">{t("cakes_sub")}</p>
           <div className="mt-8">
-            <CustomCakeDialog>
-              <Button variant="gold" size="xl" className="glow-gold">
+            <Button asChild variant="gold" size="xl" className="glow-gold">
+              <a href={whatsappLink(message)} target="_blank" rel="noreferrer">
                 <Sparkles />
                 {t("reserve_now")}
-              </Button>
-            </CustomCakeDialog>
+              </a>
+            </Button>
           </div>
         </div>
       </section>
