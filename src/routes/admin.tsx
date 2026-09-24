@@ -675,7 +675,7 @@ async function compressImage(file: File): Promise<string> {
   canvas.height = Math.round(bmp.height * scale);
   canvas.getContext("2d")!.drawImage(bmp, 0, 0, canvas.width, canvas.height);
   const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
-  return dataUrl.split(",")[1];
+  return dataUrl.split(",")[1] ?? "";
 }
 
 function PhotoPicker({
