@@ -1,9 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, MapPin, Sparkles } from "lucide-react";
 
-import heroImg from "@/assets/hero.jpg";
 import customCakeImg from "@/assets/custom-cake.jpg";
+import pistachioHarissaAsset from "@/assets/luxury/image-2.webp.asset.json";
+import pastryTrayAsset from "@/assets/luxury/image-23.png.asset.json";
+import roundPastriesAsset from "@/assets/luxury/image-24.png.asset.json";
+import kunafaAsset from "@/assets/luxury/image-25.png.asset.json";
+import pistachioRollsAsset from "@/assets/luxury/image-3.webp.asset.json";
+import pistachioNestsAsset from "@/assets/luxury/image-4.webp.asset.json";
+import pistachioFlowersAsset from "@/assets/luxury/image-5.webp.asset.json";
+import creamyDessertAsset from "@/assets/luxury/image-6.webp.asset.json";
+import baklavaSquaresAsset from "@/assets/luxury/image-7.webp.asset.json";
 import { Crown } from "@/components/Crown";
+import { LuxuryImage } from "@/components/LuxuryImage";
 import { Reveal } from "@/components/Reveal";
 import { ProductCard } from "@/components/ProductCard";
 import { CustomCakeDialog } from "@/components/CustomCakeDialog";
@@ -19,36 +28,45 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Verse Syrische zoetwaren in Utrecht: baklava, kunafa, mabroume en taarten op maat. Online bestellen voor ophalen of bezorging.",
+          "Verse Syrische zoetwaren in Utrecht: baklava, kunafa, mabroume en taarten op maat. Online reserveren en ophalen in de winkel.",
       },
       { property: "og:title", content: "Al Malek Sweets — Syrische zoetwaren in Utrecht" },
       {
         property: "og:description",
         content:
-          "Handgemaakte baklava, kunafa en luxe taarten met echte pistache. Bestel online voor ophalen of bezorging in Utrecht.",
+          "Handgemaakte baklava, kunafa en luxe taarten met echte pistache. Reserveer online en haal af in Utrecht.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,
 });
 
 function Home() {
-  const { t } = useI18n();
+  const { t, tl } = useI18n();
   const { products } = useShopProducts();
   const featured = products.filter((p) => p.featured);
+  const gallery = [
+    { src: pastryTrayAsset.url, alt: "Vers gebakken Syrische bladerdeeggebakjes", className: "lg:col-span-5 lg:row-span-2" },
+    { src: roundPastriesAsset.url, alt: "Goudbruine handgemaakte gebakjes", className: "lg:col-span-3" },
+    { src: pistachioRollsAsset.url, alt: "Mabrouma rollen gevuld met pistache", className: "lg:col-span-4" },
+    { src: pistachioFlowersAsset.url, alt: "Krokante pistachegebakjes", className: "lg:col-span-3" },
+    { src: creamyDessertAsset.url, alt: "Romig dessert met gemalen pistache", className: "lg:col-span-4" },
+    { src: baklavaSquaresAsset.url, alt: "Baklava vierkantjes met pistache", className: "lg:col-span-12" },
+  ];
 
   return (
     <>
-      <section className="relative isolate overflow-hidden bg-royal-gradient">
-        <img
-          src={heroImg}
-          alt="Syrische zoetwaren van Al Malek Sweets"
-          width={1600}
-          height={1000}
-          className="absolute inset-0 h-full w-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-linear-to-b from-royal-deep/80 via-royal/70 to-royal-deep/95" />
-        <div className="relative mx-auto flex max-w-4xl flex-col items-center px-4 py-28 text-center sm:px-6 sm:py-36">
+      <section className="relative isolate min-h-[760px] overflow-hidden bg-royal-gradient sm:min-h-[860px]">
+        <div className="absolute inset-0 opacity-45 sm:opacity-70" aria-hidden="true">
+          <LuxuryImage src={pistachioHarissaAsset.url} alt="" eager depth={0.04} className="absolute -start-20 top-10 h-[38rem] w-[25rem] -rotate-6 sm:-start-14 lg:start-[2%]" imageClassName="object-cover" />
+          <LuxuryImage src={kunafaAsset.url} alt="" eager depth={0.065} className="absolute -end-24 bottom-8 h-[34rem] w-[25rem] rotate-5 sm:-end-10 lg:end-[2%]" imageClassName="object-cover" />
+          <LuxuryImage src={pistachioNestsAsset.url} alt="" eager depth={0.1} className="absolute end-[14%] top-10 hidden h-52 w-40 rotate-3 lg:block" imageClassName="object-cover" />
+        </div>
+        <div className="absolute inset-0 bg-linear-to-b from-royal-deep/75 via-royal-deep/90 to-royal-deep" />
+        <div className="absolute inset-y-0 left-1/2 w-full max-w-3xl -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,color-mix(in_oklab,var(--royal-deep)_82%,transparent)_20%,transparent_72%)]" />
+        <div className="relative mx-auto flex min-h-[760px] max-w-4xl flex-col items-center justify-center px-4 py-24 text-center sm:min-h-[860px] sm:px-6">
           <div className="flex flex-col items-center">
             <span className="crown-float">
               <Crown className="h-20 w-28 sm:h-24 sm:w-36" />
@@ -90,6 +108,37 @@ function Home() {
                   {t(s.k)}
                 </p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden border-y border-gold/20 bg-secondary py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <Reveal className="mx-auto max-w-2xl text-center">
+            <p className="text-xs uppercase tracking-[0.35em] text-gold-deep">AL MALEK SIGNATURE</p>
+            <h2 className="mt-3 font-display text-3xl sm:text-4xl">
+              {tl({ nl: "De koninklijke collectie", ar: "المجموعة الملكية", en: "The royal collection" })}
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl leading-relaxed text-muted-foreground">
+              {tl({
+                nl: "Met de hand gevormd, royaal gevuld en iedere dag vers afgewerkt.",
+                ar: "مصنوعة يدوياً، غنية بالحشوة وطازجة كل يوم.",
+                en: "Hand-shaped, generously filled and finished fresh every day.",
+              })}
+            </p>
+          </Reveal>
+          <div className="mt-12 grid auto-rows-[17rem] grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-12">
+            {gallery.map((image, index) => (
+              <Reveal key={image.src} delay={(index % 3) * 90} className={image.className}>
+                <LuxuryImage
+                  src={image.src}
+                  alt={image.alt}
+                  depth={0.045 + (index % 3) * 0.018}
+                  className="h-full w-full"
+                  imageClassName="object-cover"
+                />
+              </Reveal>
             ))}
           </div>
         </div>
