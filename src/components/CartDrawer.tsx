@@ -84,7 +84,6 @@ export function CartDrawer() {
       items,
       "",
       `${t("subtotal")}: ${money(subtotal)}`,
-      `${t("delivery_fee")}: ${fee === 0 ? t("free") : money(fee)}`,
       `${t("total")}: ${money(total)}`,
       "",
       `${t("your_name")}: ${form.name}`,

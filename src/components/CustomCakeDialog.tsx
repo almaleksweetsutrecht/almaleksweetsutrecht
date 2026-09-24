@@ -46,16 +46,14 @@ export function CustomCakeDialog({ children }: { children: ReactNode }) {
   const sendRequest = useServerFn(createCakeRequest);
   const fileRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
-  const [size, setSize] = useState(sizes[1]!.id);
   const [layers, setLayers] = useState(2);
   const [flavour, setFlavour] = useState(flavours[0]!.key);
   const [occasion, setOccasion] = useState(occasions[0]!.key);
-  const [mode, setMode] = useState<"pickup" | "delivery">("pickup");
   const [photo, setPhoto] = useState<string | null>(null);
   const [photoName, setPhotoName] = useState("");
   const [form, setForm] = useState({ name: "", phone: "", date: "", time: "", notes: "" });
 
-  const base = sizes.find((s) => s.id === size)!.price;
+  const base = sizes[1]!.price;
   const estimate = base + (layers - 1) * 14;
 
   const submit = async () => {
@@ -66,10 +64,9 @@ export function CustomCakeDialog({ children }: { children: ReactNode }) {
     const message = [
       `*${STORE.name} — ${t("cakes_title")}*`,
       `${t("occasion")}: ${t(occasion)}`,
-      `${t("size")}: ${sizes.find((s) => s.id === size)!.label} cm`,
       `${t("layers")}: ${layers}`,
       `${t("flavor")}: ${t(flavour)}`,
-      `${t("fulfilment")}: ${mode === "pickup" ? t("pickup") : t("delivery")}`,
+      `${t("fulfilment")}: ${t("pickup")}`,
       `${t("date")}: ${form.date} ${form.time}`,
       `${t("your_name")}: ${form.name}`,
       `${t("phone")}: ${form.phone}`,
@@ -86,10 +83,9 @@ export function CustomCakeDialog({ children }: { children: ReactNode }) {
           customerName: form.name.trim(),
           phone: form.phone.trim(),
           occasion: t(occasion),
-          size: sizes.find((s) => s.id === size)!.label,
           layers: String(layers),
           flavour: t(flavour),
-          fulfilment: mode,
+          fulfilment: "pickup",
           wantedDate: form.date,
           wantedTime: form.time,
           notes: [form.notes, photoName ? `Referentiefoto: ${photoName}` : ""]
@@ -129,23 +125,6 @@ export function CustomCakeDialog({ children }: { children: ReactNode }) {
                 onClick={() => setOccasion(o.key)}
               >
                 {t(o.key)}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid gap-2">
-          <Label>{t("size")}</Label>
-          <div className="grid grid-cols-2 gap-2">
-            {sizes.map((s) => (
-              <Button
-                key={s.id}
-                size="sm"
-                variant={size === s.id ? "gold" : "goldOutline"}
-                className="h-11 whitespace-normal text-xs"
-                onClick={() => setSize(s.id)}
-              >
-                {s.label}
               </Button>
             ))}
           </div>
@@ -213,23 +192,6 @@ export function CustomCakeDialog({ children }: { children: ReactNode }) {
             )}
           </div>
           <p className="text-xs text-muted-foreground">{t("photo_hint")}</p>
-        </div>
-
-        <div className="grid gap-2">
-          <Label>{t("fulfilment")}</Label>
-          <div className="grid grid-cols-2 gap-2">
-            {(["pickup", "delivery"] as const).map((m) => (
-              <Button
-                key={m}
-                size="sm"
-                variant={mode === m ? "gold" : "goldOutline"}
-                className="h-11 whitespace-normal text-xs"
-                onClick={() => setMode(m)}
-              >
-                {t(m)}
-              </Button>
-            ))}
-          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
