@@ -179,11 +179,6 @@ export function CartDrawer() {
               </div>
             ))}
 
-            <div className="pt-2">
-              <div className="flex h-11 items-center justify-center rounded-md border border-gold bg-secondary text-xs font-medium text-gold">
-                {t("pickup")}
-              </div>
-            </div>
 
             <div className="grid gap-2">
               <Label>{t("payment_method")}</Label>
