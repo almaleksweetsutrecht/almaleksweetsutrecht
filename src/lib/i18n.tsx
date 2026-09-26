@@ -158,7 +158,7 @@ type Ctx = {
 const I18nContext = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("nl");
+  const [lang, setLangState] = useState<Lang>("ar");
 
   useEffect(() => {
     const stored = window.localStorage.getItem("almalek-lang") as Lang | null;

@@ -22,7 +22,38 @@ import {
   adminUploadImage,
 } from "@/lib/admin.functions";
 import { fallbackImage, imageBySlug } from "@/lib/shop";
-import { money } from "@/lib/i18n";
+import { money, useI18n, type Lang } from "@/lib/i18n";
+
+type Tx = (nl: string, ar: string, en: string) => string;
+function useTx(): Tx {
+  const { lang } = useI18n();
+  return (nl, ar, en) => ({ nl, ar, en })[lang];
+}
+
+const langOptions: { code: Lang; label: string }[] = [
+  { code: "ar", label: "العربية" },
+  { code: "nl", label: "NL" },
+  { code: "en", label: "EN" },
+];
+
+function AdminLangSwitch() {
+  const { lang, setLang } = useI18n();
+  return (
+    <div className="flex gap-1">
+      {langOptions.map((l) => (
+        <Button
+          key={l.code}
+          size="sm"
+          variant={lang === l.code ? "gold" : "goldOutline"}
+          onClick={() => setLang(l.code)}
+          className={l.code === "ar" ? "arabic" : ""}
+        >
+          {l.label}
+        </Button>
+      ))}
+    </div>
+  );
+}
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -155,6 +186,7 @@ function AdminPage() {
 
 function PinGate({ onAuthed }: { onAuthed: (token: string) => void }) {
   const login = useServerFn(adminLogin);
+  const tx = useTx();
   const [pin, setPin] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -165,12 +197,12 @@ function PinGate({ onAuthed }: { onAuthed: (token: string) => void }) {
       const res = await login({ data: { pin: pin.trim() } });
       if (res.ok && res.token) {
         onAuthed(res.token);
-        toast.success("Welkom terug 👑");
+        toast.success(tx("Welkom terug 👑", "أهلاً بعودتك 👑", "Welcome back 👑"));
       } else {
-        toast.error("Onjuiste pincode");
+        toast.error(tx("Onjuiste pincode", "رمز PIN غير صحيح", "Wrong PIN"));
       }
     } catch {
-      toast.error("Inloggen mislukt");
+      toast.error(tx("Inloggen mislukt", "فشل تسجيل الدخول", "Login failed"));
     } finally {
       setBusy(false);
       setPin("");
@@ -184,11 +216,13 @@ function PinGate({ onAuthed }: { onAuthed: (token: string) => void }) {
           <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gold-gradient text-royal-deep">
             <KeyRound className="h-6 w-6" />
           </span>
-          <h1 className="font-display text-2xl text-gold-deep">Eigenaar login</h1>
-          <p className="arabic text-sm text-muted-foreground">لوحة التحكم الخاصة بصاحب المحل</p>
+          <h1 className="font-display text-2xl text-gold-deep">
+            {tx("Eigenaar login", "دخول صاحب المحل", "Owner login")}
+          </h1>
+          <AdminLangSwitch />
         </div>
         <div className="mt-6 grid gap-3">
-          <Label htmlFor="pin">Pincode</Label>
+          <Label htmlFor="pin">{tx("Pincode", "رمز PIN", "PIN code")}</Label>
           <Input
             id="pin"
             type="password"
@@ -200,11 +234,16 @@ function PinGate({ onAuthed }: { onAuthed: (token: string) => void }) {
             className="text-center text-2xl tracking-[0.5em]"
           />
           <Button variant="gold" size="lg" disabled={busy} onClick={submit}>
-            {busy ? "Controleren…" : "Inloggen"}
+            {busy ? tx("Controleren…", "جارٍ التحقق…", "Checking…") : tx("Inloggen", "دخول", "Log in")}
           </Button>
           <p className="rounded-md border border-gold/30 bg-gold/10 px-3 py-2 text-center text-xs text-muted-foreground">
-            Standaard pincode: <span className="font-bold text-gold-deep">1234</span> — wijzig deze
-            na het inloggen bij Instellingen.
+            {tx("Standaard pincode:", "رمز PIN الافتراضي:", "Default PIN:")}{" "}
+            <span className="font-bold text-gold-deep">1234</span> —{" "}
+            {tx(
+              "wijzig deze na het inloggen bij Instellingen.",
+              "غيّره بعد الدخول من الإعدادات.",
+              "change it after logging in under Settings.",
+            )}
           </p>
         </div>
       </div>
@@ -220,6 +259,9 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
   const saveProduct = useServerFn(adminSaveProduct);
   const deleteProduct = useServerFn(adminDeleteProduct);
   const changePin = useServerFn(adminChangePin);
+  const tx = useTx();
+  const { lang } = useI18n();
+  const locale = lang === "ar" ? "ar" : lang === "en" ? "en-GB" : "nl-NL";
 
   const [editing, setEditing] = useState<ProductForm | null>(null);
   const [newPin, setNewPin] = useState("");
@@ -232,7 +274,7 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
 
   useEffect(() => {
     if (error) {
-      toast.error("Sessie verlopen — log opnieuw in");
+      toast.error(tx("Sessie verlopen — log opnieuw in", "انتهت الجلسة — سجّل الدخول مجدداً", "Session expired — log in again"));
       onSignOut();
     }
   }, [error, onSignOut]);
@@ -242,12 +284,12 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
   const orderMutation = useMutation({
     mutationFn: (v: { id: string; status: Status }) => setOrderStatus({ data: { token, ...v } }),
     onSuccess: refresh,
-    onError: () => toast.error("Bijwerken mislukt"),
+    onError: () => toast.error(tx("Bijwerken mislukt", "فشل التحديث", "Update failed")),
   });
   const cakeMutation = useMutation({
     mutationFn: (v: { id: string; status: Status }) => setCakeStatus({ data: { token, ...v } }),
     onSuccess: refresh,
-    onError: () => toast.error("Bijwerken mislukt"),
+    onError: () => toast.error(tx("Bijwerken mislukt", "فشل التحديث", "Update failed")),
   });
   const productMutation = useMutation({
     mutationFn: (v: ProductForm) =>
@@ -272,21 +314,21 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
         },
       }),
     onSuccess: () => {
-      toast.success("Product opgeslagen");
+      toast.success(tx("Product opgeslagen", "تم حفظ الصنف", "Product saved"));
       setEditing(null);
       refresh();
       qc.invalidateQueries({ queryKey: ["shop-products"] });
     },
-    onError: () => toast.error("Opslaan mislukt — check de gegevens"),
+    onError: () => toast.error(tx("Opslaan mislukt — check de gegevens", "فشل الحفظ — تحقق من البيانات", "Save failed — check the details")),
   });
   const deleteMutation = useMutation({
     mutationFn: (id: string) => deleteProduct({ data: { token, id } }),
     onSuccess: () => {
-      toast.success("Product verwijderd");
+      toast.success(tx("Product verwijderd", "تم حذف الصنف", "Product deleted"));
       refresh();
       qc.invalidateQueries({ queryKey: ["shop-products"] });
     },
-    onError: () => toast.error("Verwijderen mislukt"),
+    onError: () => toast.error(tx("Verwijderen mislukt", "فشل الحذف", "Delete failed")),
   });
 
   const orders = (data?.orders ?? []) as unknown as OrderRow[];
@@ -302,13 +344,15 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-3xl text-gold-deep">Owner dashboard</h1>
-          <p className="arabic text-sm text-muted-foreground">لوحة التحكم الخاصة بصاحب المحل</p>
+          <h1 className="font-display text-3xl text-gold-deep">
+            {tx("Eigenaarsdashboard", "لوحة تحكم صاحب المحل", "Owner dashboard")}
+          </h1>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <AdminLangSwitch />
           <Button variant="goldOutline" size="sm" onClick={refresh}>
             <RefreshCw />
-            Verversen
+            {tx("Verversen", "تحديث", "Refresh")}
           </Button>
           <Button
             variant="goldOutline"
@@ -319,17 +363,17 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
             }}
           >
             <LogOut />
-            Uitloggen
+            {tx("Uitloggen", "خروج", "Log out")}
           </Button>
         </div>
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-4">
         {[
-          { label: "Omzet totaal", value: money(revenue) },
-          { label: "Bestellingen", value: String(orders.length) },
-          { label: "Open bestellingen", value: String(openOrders) },
-          { label: "Taartaanvragen", value: String(cakes.length) },
+          { label: tx("Omzet totaal", "إجمالي المبيعات", "Total revenue"), value: money(revenue) },
+          { label: tx("Bestellingen", "الطلبات", "Orders"), value: String(orders.length) },
+          { label: tx("Open bestellingen", "طلبات مفتوحة", "Open orders"), value: String(openOrders) },
+          { label: tx("Taartaanvragen", "طلبات الكيك", "Cake requests"), value: String(cakes.length) },
         ].map((m) => (
           <div key={m.label} className="rounded-xl border border-gold/30 bg-card p-4">
             <p className="text-xs uppercase tracking-wide text-muted-foreground">{m.label}</p>
@@ -340,16 +384,16 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
 
       <Tabs defaultValue="orders" className="mt-8">
         <TabsList>
-          <TabsTrigger value="orders">Bestellingen</TabsTrigger>
-          <TabsTrigger value="cakes">Taartaanvragen</TabsTrigger>
-          <TabsTrigger value="products">Menu</TabsTrigger>
-          <TabsTrigger value="settings">Instellingen</TabsTrigger>
+          <TabsTrigger value="orders">{tx("Bestellingen", "الطلبات", "Orders")}</TabsTrigger>
+          <TabsTrigger value="cakes">{tx("Taartaanvragen", "طلبات الكيك", "Cake requests")}</TabsTrigger>
+          <TabsTrigger value="products">{tx("Menu", "القائمة", "Menu")}</TabsTrigger>
+          <TabsTrigger value="settings">{tx("Instellingen", "الإعدادات", "Settings")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="orders" className="mt-4 grid gap-3">
-          {isLoading && <p className="text-muted-foreground">Laden…</p>}
+          {isLoading && <p className="text-muted-foreground">{tx("Laden…", "جارٍ التحميل…", "Loading…")}</p>}
           {!isLoading && orders.length === 0 && (
-            <p className="text-muted-foreground">Nog geen bestellingen.</p>
+            <p className="text-muted-foreground">{tx("Nog geen bestellingen.", "لا توجد طلبات بعد.", "No orders yet.")}</p>
           )}
           {orders.map((o) => (
             <div key={o.id} className="rounded-xl border border-border bg-card p-4">
@@ -359,8 +403,8 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                     {o.reference} · {o.customer_name}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {new Date(o.created_at).toLocaleString("nl-NL")} · {o.phone} ·{" "}
-                    {o.fulfilment === "delivery" ? "Bezorging" : "Ophalen"} · {o.payment_method}
+                    {new Date(o.created_at).toLocaleString(locale)} · {o.phone} ·{" "}
+                    {o.fulfilment === "delivery" ? tx("Bezorging", "توصيل", "Delivery") : tx("Ophalen", "استلام", "Pickup")} · {o.payment_method}
                   </p>
                 </div>
                 <span className="font-display text-lg text-gold-deep">{money(Number(o.total))}</span>
@@ -386,7 +430,7 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                     variant={o.status === s ? "gold" : "goldOutline"}
                     onClick={() => orderMutation.mutate({ id: o.id, status: s })}
                   >
-                    {statusLabel[s]}
+                    {tx(...statusLabel[s])}
                   </Button>
                 ))}
               </div>
@@ -396,7 +440,7 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
 
         <TabsContent value="cakes" className="mt-4 grid gap-3">
           {!isLoading && cakes.length === 0 && (
-            <p className="text-muted-foreground">Nog geen taartaanvragen.</p>
+            <p className="text-muted-foreground">{tx("Nog geen taartaanvragen.", "لا توجد طلبات كيك بعد.", "No cake requests yet.")}</p>
           )}
           {cakes.map((c) => (
             <div key={c.id} className="rounded-xl border border-border bg-card p-4">
@@ -405,16 +449,16 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                   {c.customer_name} · {c.phone}
                 </p>
                 <span className="text-xs text-muted-foreground">
-                  {new Date(c.created_at).toLocaleString("nl-NL")}
+                  {new Date(c.created_at).toLocaleString(locale)}
                 </span>
               </div>
               <p className="mt-1 text-sm text-muted-foreground">
-                {[c.occasion, c.size, c.layers ? `${c.layers} lagen` : "", c.flavour]
+                {[c.occasion, c.size, c.layers ? `${c.layers} ${tx("lagen", "طبقات", "layers")}` : "", c.flavour]
                   .filter(Boolean)
                   .join(" · ")}
               </p>
               <p className="text-sm text-muted-foreground">
-                {c.fulfilment === "delivery" ? "Bezorging" : "Ophalen"} · {c.wanted_date ?? ""}{" "}
+                {c.fulfilment === "delivery" ? tx("Bezorging", "توصيل", "Delivery") : tx("Ophalen", "استلام", "Pickup")} · {c.wanted_date ?? ""}{" "}
                 {c.wanted_time ?? ""}
               </p>
               {c.notes && <p className="mt-1 text-sm">{c.notes}</p>}
@@ -426,7 +470,7 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                     variant={c.status === s ? "gold" : "goldOutline"}
                     onClick={() => cakeMutation.mutate({ id: c.id, status: s })}
                   >
-                    {statusLabel[s]}
+                    {tx(...statusLabel[s])}
                   </Button>
                 ))}
               </div>
@@ -437,19 +481,19 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
         <TabsContent value="products" className="mt-4">
           <Button variant="gold" size="sm" onClick={() => setEditing({ ...emptyProduct })}>
             <Plus />
-            Nieuw product
+            {tx("Nieuw product", "صنف جديد", "New product")}
           </Button>
 
           {editing && (
             <div className="mt-4 grid gap-3 rounded-xl border border-gold/40 bg-card p-4 sm:grid-cols-2">
               {(
                 [
-                  ["slug", "Slug (url-naam)"],
-                  ["name_nl", "Naam NL"],
-                  ["name_ar", "Naam AR"],
-                  ["name_en", "Naam EN"],
-                  ["price", "Prijs (€)"],
-                  ["sort_order", "Sortering"],
+                  ["slug", tx("Slug (url-naam)", "المعرّف (رابط)", "Slug (url name)")],
+                  ["name_nl", tx("Naam NL", "الاسم بالهولندية", "Name NL")],
+                  ["name_ar", tx("Naam AR", "الاسم بالعربية", "Name AR")],
+                  ["name_en", tx("Naam EN", "الاسم بالإنجليزية", "Name EN")],
+                  ["price", tx("Prijs (€)", "السعر (€)", "Price (€)")],
+                  ["sort_order", tx("Sortering", "الترتيب", "Sort order")],
                 ] as [keyof ProductForm, string][]
               ).map(([field, label]) => (
                 <div key={field} className="grid gap-1.5">
@@ -467,7 +511,7 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                 onChange={(url) => setEditing((e) => (e ? { ...e, image_url: url } : e))}
               />
               <div className="grid gap-1.5">
-                <Label>Categorie</Label>
+                <Label>{tx("Categorie", "الفئة", "Category")}</Label>
                 <select
                   className="h-9 rounded-md border border-input bg-background px-3 text-sm"
                   value={editing.category}
@@ -475,15 +519,15 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                     setEditing({ ...editing, category: e.target.value as ProductForm["category"] })
                   }
                 >
-                  <option value="cold">Koelgebak</option>
-                  <option value="baklava">Baklava</option>
-                  <option value="pastries">Gebak</option>
-                  <option value="cookies">Koekjes</option>
-                  <option value="candy">Snoep & specialiteiten</option>
+                  {(Object.keys(catLabel) as ProductForm["category"][]).map((c) => (
+                    <option key={c} value={c}>
+                      {tx(...catLabel[c])}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="grid gap-1.5">
-                <Label>Eenheid</Label>
+                <Label>{tx("Eenheid", "الوحدة", "Unit")}</Label>
                 <select
                   className="h-9 rounded-md border border-input bg-background px-3 text-sm"
                   value={editing.unit}
@@ -491,17 +535,17 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                     setEditing({ ...editing, unit: e.target.value as ProductForm["unit"] })
                   }
                 >
-                  <option value="kg">per kg</option>
-                  <option value="piece">per stuk</option>
-                  <option value="box">per doos</option>
-                  <option value="cake">per taart</option>
+                  <option value="kg">{tx("per kg", "للكيلو", "per kg")}</option>
+                  <option value="piece">{tx("per stuk", "للقطعة", "per piece")}</option>
+                  <option value="box">{tx("per doos", "للعلبة", "per box")}</option>
+                  <option value="cake">{tx("per taart", "للقالب", "per cake")}</option>
                 </select>
               </div>
               {(
                 [
-                  ["desc_nl", "Beschrijving NL"],
-                  ["desc_ar", "Beschrijving AR"],
-                  ["desc_en", "Beschrijving EN"],
+                  ["desc_nl", tx("Beschrijving NL", "الوصف بالهولندية", "Description NL")],
+                  ["desc_ar", tx("Beschrijving AR", "الوصف بالعربية", "Description AR")],
+                  ["desc_en", tx("Beschrijving EN", "الوصف بالإنجليزية", "Description EN")],
                 ] as [keyof ProductForm, string][]
               ).map(([field, label]) => (
                 <div key={field} className="grid gap-1.5 sm:col-span-2">
@@ -520,7 +564,7 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                     checked={editing.available}
                     onChange={(e) => setEditing({ ...editing, available: e.target.checked })}
                   />
-                  Op voorraad
+                  {tx("Op voorraad", "متوفر", "In stock")}
                 </label>
                 <label className="flex items-center gap-2 text-sm">
                   <input
@@ -528,7 +572,7 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                     checked={editing.featured}
                     onChange={(e) => setEditing({ ...editing, featured: e.target.checked })}
                   />
-                  Uitgelicht
+                  {tx("Uitgelicht", "مميّز", "Featured")}
                 </label>
               </div>
               <div className="flex gap-2 sm:col-span-2">
@@ -537,10 +581,10 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                   onClick={() => productMutation.mutate(editing)}
                   disabled={productMutation.isPending}
                 >
-                  Opslaan
+                  {tx("Opslaan", "حفظ", "Save")}
                 </Button>
                 <Button variant="goldOutline" onClick={() => setEditing(null)}>
-                  Annuleren
+                  {tx("Annuleren", "إلغاء", "Cancel")}
                 </Button>
               </div>
             </div>
@@ -559,10 +603,10 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                     className="h-14 w-14 rounded-lg object-cover border border-gold/30"
                   />
                   <div>
-                  <p className="font-semibold">{p.name_nl}</p>
+                  <p className="font-semibold">{lang === "ar" ? p.name_ar : lang === "en" ? p.name_en : p.name_nl}</p>
                   <p className="text-xs text-muted-foreground">
-                    {p.slug} · {p.category} · {money(Number(p.price))} ·{" "}
-                    {p.available ? "op voorraad" : "uitverkocht"}
+                    {p.slug} · {tx(...catLabel[p.category])} · {money(Number(p.price))} ·{" "}
+                    {p.available ? tx("op voorraad", "متوفر", "in stock") : tx("uitverkocht", "نفد", "sold out")}
                   </p>
                   </div>
                 </div>
@@ -590,7 +634,7 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                       })
                     }
                   >
-                    {p.available ? "Uitverkocht" : "Op voorraad"}
+                    {p.available ? tx("Uitverkocht", "نفد", "Sold out") : tx("Op voorraad", "متوفر", "In stock")}
                   </Button>
                   <Button
                     size="sm"
@@ -615,12 +659,12 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
                       })
                     }
                   >
-                    Bewerken
+                    {tx("Bewerken", "تعديل", "Edit")}
                   </Button>
                   <Button
                     size="icon"
                     variant="goldOutline"
-                    aria-label="verwijderen"
+                    aria-label={tx("verwijderen", "حذف", "delete")}
                     onClick={() => deleteMutation.mutate(p.id)}
                   >
                     <Trash2 />
@@ -632,7 +676,7 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
         </TabsContent>
 
         <TabsContent value="settings" className="mt-4 max-w-sm grid gap-3">
-          <Label>Nieuwe pincode</Label>
+          <Label>{tx("Nieuwe pincode", "رمز PIN جديد", "New PIN")}</Label>
           <Input
             type="password"
             inputMode="numeric"
@@ -645,13 +689,13 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
               try {
                 await changePin({ data: { token, pin: newPin.trim() } });
                 setNewPin("");
-                toast.success("Pincode gewijzigd");
+                toast.success(tx("Pincode gewijzigd", "تم تغيير رمز PIN", "PIN changed"));
               } catch {
-                toast.error("Pincode wijzigen mislukt (min. 4 cijfers)");
+                toast.error(tx("Pincode wijzigen mislukt (min. 4 cijfers)", "فشل تغيير الرمز (4 أرقام على الأقل)", "Changing PIN failed (min. 4 digits)"));
               }
             }}
           >
-            Pincode opslaan
+            {tx("Pincode opslaan", "حفظ الرمز", "Save PIN")}
           </Button>
         </TabsContent>
       </Tabs>
@@ -659,11 +703,19 @@ function Dashboard({ token, onSignOut }: { token: string; onSignOut: () => void 
   );
 }
 
-const statusLabel: Record<Status, string> = {
-  new: "Nieuw",
-  preparing: "In bereiding",
-  ready: "Klaar",
-  delivered: "Bezorgd",
+const statusLabel: Record<Status, [string, string, string]> = {
+  new: ["Nieuw", "جديد", "New"],
+  preparing: ["In bereiding", "قيد التحضير", "Preparing"],
+  ready: ["Klaar", "جاهز", "Ready"],
+  delivered: ["Opgehaald", "تم الاستلام", "Collected"],
+};
+
+const catLabel: Record<ProductForm["category"], [string, string, string]> = {
+  cold: ["Koelgebak", "حلويات باردة", "Cold desserts"],
+  baklava: ["Baklava", "بقلاوة", "Baklava"],
+  pastries: ["Gebak", "حلويات عربية", "Pastries"],
+  cookies: ["Koekjes", "كعك ومعمول", "Cookies"],
+  candy: ["Snoep & specialiteiten", "سكاكر وتخصصات", "Sweets & specialities"],
 };
 
 async function compressImage(file: File): Promise<string> {
@@ -690,6 +742,7 @@ function PhotoPicker({
   onChange: (url: string) => void;
 }) {
   const upload = useServerFn(adminUploadImage);
+  const tx = useTx();
   const [busy, setBusy] = useState(false);
   const preview = value || imageBySlug[slug] || fallbackImage;
 
@@ -700,9 +753,9 @@ function PhotoPicker({
       const base64 = await compressImage(file);
       const res = await upload({ data: { token, base64, contentType: "image/jpeg" } });
       onChange(res.url);
-      toast.success("Foto geüpload — klik Opslaan");
+      toast.success(tx("Foto geüpload — klik Opslaan", "تم رفع الصورة — اضغط حفظ", "Photo uploaded — click Save"));
     } catch {
-      toast.error("Foto uploaden mislukt");
+      toast.error(tx("Foto uploaden mislukt", "فشل رفع الصورة", "Photo upload failed"));
     } finally {
       setBusy(false);
     }
@@ -710,7 +763,7 @@ function PhotoPicker({
 
   return (
     <div className="grid gap-2 sm:col-span-2">
-      <Label>Foto</Label>
+      <Label>{tx("Foto", "الصورة", "Photo")}</Label>
       <div className="flex flex-wrap items-center gap-3">
         <img
           src={preview}
@@ -719,7 +772,7 @@ function PhotoPicker({
         />
         <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-gold/60 px-3 py-2 text-sm text-gold">
           <Camera className="h-4 w-4" />
-          {busy ? "Uploaden..." : value ? "Foto wijzigen" : "Foto toevoegen"}
+          {busy ? tx("Uploaden...", "جارٍ الرفع...", "Uploading...") : value ? tx("Foto wijzigen", "تغيير الصورة", "Change photo") : tx("Foto toevoegen", "إضافة صورة", "Add photo")}
           <input
             type="file"
             accept="image/*"
@@ -734,12 +787,12 @@ function PhotoPicker({
         {value && (
           <Button type="button" size="sm" variant="goldOutline" onClick={() => onChange("")}>
             <ImageOff />
-            Foto verwijderen
+            {tx("Foto verwijderen", "حذف الصورة", "Remove photo")}
           </Button>
         )}
       </div>
       <p className="text-xs text-muted-foreground">
-        Kies een foto van je telefoon of maak er direct een. Zonder eigen foto wordt de standaardfoto getoond.
+        {tx("Kies een foto van je telefoon of maak er direct een. Zonder eigen foto wordt de standaardfoto getoond.", "اختر صورة من هاتفك أو التقط واحدة الآن. بدون صورة خاصة تظهر الصورة الافتراضية.", "Pick a photo from your phone or take one now. Without your own photo the default is shown.")}
       </p>
     </div>
   );
